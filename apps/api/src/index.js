@@ -4,7 +4,7 @@ const config = require("./config");
 (async () => {
     const webserver = await server.build({
         logger: { level: "info" },
-        trustProxy: config.env.HTTP_TRUST_PROXY
+        /*trustProxy: config.env.HTTP_TRUST_PROXY*/
     })
 
     webserver.listen({
