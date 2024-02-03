@@ -3,23 +3,71 @@ import { ref } from "vue"
 import { reset } from "@formkit/vue"
 
 const myForm = ref(null)
+const error = ref(null)
 async function login() {
     console.log("Login clicked!")
+    if (myForm.value === null) {
+        return
+    }
     console.log(myForm.value.node.value)
-    // TODO Send request to server
+    try {
+        await fetch("https://localhost:8080/authenticaion/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: {
+                "username": myForm.value.node.value.username,
+                "password": myForm.value.node.value.password
+            }
+        })
+    } catch (e) {
+        if (e.hasOwnProperty("message")) {
+            error.value = e.message
+        } else {
+            error.value = "Unknown error"
+        }
+        return
+    }
     reset(myForm.value.node)
+    error.value = null
 }
 
 async function signup() {
     console.log("Signup clicked!")
+    if (myForm.value === null) {
+        return
+    }
     console.log(myForm.value.node.value)
-    // TODO Send request to server
+    try {
+        await fetch("https://localhost:8080/authenticaion/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: {
+                "username": myForm.value.node.value.username,
+                "password": myForm.value.node.value.password
+            }
+        })
+    } catch (e) {
+        if (e.hasOwnProperty("message")) {
+            error.value = e.message
+        } else {
+            error.value = "Unknown error"
+        }
+        return
+    }
     reset(myForm.value.node)
+    error.value = null
 }
 </script>
 
 <template>
     <main>
+        <div v-if="error !== null" class="alert alert-danger" role="alert">
+            Error: {{ error }}
+        </div>
         <h2>Login</h2>
         <FormKit
             type="form"
