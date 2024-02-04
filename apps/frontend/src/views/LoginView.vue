@@ -5,6 +5,8 @@ import { reset } from "@formkit/vue"
 const myForm = ref(null)
 const error = ref(null)
 async function login() {
+   // console.log(myForm.value.node["incomplete-message"])
+
     console.log("Login clicked!")
     if (myForm.value === null) {
         return
@@ -73,11 +75,16 @@ async function signup() {
             type="form"
             ref=myForm
             :actions="false">
+            <!-- Username min of 4 characters, only a-z, and only 1 underscore -->
             <FormKit
                 type="text"
                 name="username"
                 label="UID"
-                validation="required|min:4|alpha|lowercase|"
+                :validation="[['required'],['matches', /^(?=[a-z]*_?[a-z]*$)[a-z_]{4,}$/]]"
+                :validation-messages="{
+                    required: 'A password is required',
+                    matches: 'Password must be at least 4 characters of only lowercase letters and may have one underscore (_)'
+                }"
                 validation-visibility="live" />
             <FormKit
                 type="password"
