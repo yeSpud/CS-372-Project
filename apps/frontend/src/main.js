@@ -1,6 +1,6 @@
-import { createApp } from "vue"
-import { plugin, defaultConfig } from "@formkit/vue"
+import { defaultConfig, plugin } from "@formkit/vue"
 import { createPinia } from "pinia"
+import { createApp } from "vue"
 
 import App from "./App.vue"
 import router from "./router"
