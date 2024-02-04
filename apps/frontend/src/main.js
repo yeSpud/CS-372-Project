@@ -1,5 +1,3 @@
-import "./assets/main.css"
-
 import { createApp } from "vue"
 import { plugin, defaultConfig } from "@formkit/vue"
 import { createPinia } from "pinia"

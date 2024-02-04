@@ -73,15 +73,16 @@ async function signup() {
 </script>
 
 <template>
-    <main>
+    <main class="container">
         <div v-if="error !== null" class="alert alert-danger" role="alert">
             Error: {{ error }}
         </div>
         <div v-if="signupSuccess" class="alert alert-success" role="alert">
             Successfully signed up!
         </div>
-        <h2>Login</h2>
+        <h2 align="center">Login</h2>
         <FormKit
+            class="form-group"
             type="form"
             ref=myForm
             @submit="login"
@@ -92,6 +93,7 @@ async function signup() {
                 type="text"
                 name="username"
                 label="UID"
+                input-class="form-control"
                 :validation="[['required'],['matches', /^(?=[a-z]*_?[a-z]*$)[a-z_]{4,}$/]]"
                 :validation-messages="{
                     required: 'A username is required',
@@ -104,21 +106,22 @@ async function signup() {
                 type="password"
                 name="password"
                 label="pwd"
+                input-class="form-control"
                 :validation="[['required'],['contains_uppercase'],['contains_lowercase'],['contains_numeric'],['contains_symbol'],['matches', /^[^.]{8,}$/]]"
                 validation-visibility="live"
                 :validation-messages="{
                     required: 'A password is required',
                     matches: 'Password must be at least 8 and not include a period (.)'
                 }"/>
-            <div>
-                <FormKit type="submit" label="Login" />
-                <FormKit type="button" label="Signup" @click="signup" />
+            <div class="row btn-group btn-group-lg" role="group">
+                <FormKit input-class="btn" type="submit" label="Login" />
+                <FormKit input-class="btn" type="button" label="Signup" @click="signup" />
             </div>
         </FormKit>
     </main>
 </template>
 
-<style scoped>
+<style>
 body {
     background-color: #b7410e;
 }
