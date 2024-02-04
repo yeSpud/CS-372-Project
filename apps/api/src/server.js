@@ -2,6 +2,7 @@ const fastify = require("fastify");
 const traps = require("@dnlup/fastify-traps");
 const fastifyCookie = require("@fastify/cookie");
 const fastifySession = require("@fastify/session");
+const fastifyCors = require("@fastify/cors")
 const config = require("./config");
 const routes = require("./routes");
 
@@ -17,6 +18,12 @@ async function build(opts = {}) {
         cookieName: "sessionId",
         cookie: { secure: config.env.NODE_ENV !== "development" },
         secret: "a secret with minimum length of 32 characters"
+    })
+
+    // For this simple project we are going to disable cors
+    await server.register(fastifyCors, {
+        origin: config.env.CORS_URL,
+        //credentials: true
     })
 
     // Register our routes

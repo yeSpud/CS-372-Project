@@ -1,28 +1,31 @@
 <script setup>
 import { ref } from "vue"
 import { reset } from "@formkit/vue"
+import router from "@/router/index.js"
 
 const myForm = ref(null)
 const error = ref(null)
-async function login() {
-   // console.log(myForm.value.node["incomplete-message"])
+const signupSuccess = ref(false)
 
-    console.log("Login clicked!")
-    if (myForm.value === null) {
-        return
-    }
-    console.log(myForm.value.node.value)
+async function login(credentials) {
+    signupSuccess.value = false
     try {
-        await fetch("https://localhost:8080/authenticaion/login", {
+        const response = await fetch("http://localhost:8080/authentication/login", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: {
-                "username": myForm.value.node.value.username,
-                "password": myForm.value.node.value.password
-            }
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials)
         })
+
+        if (response.ok) {
+
+            // TODO Set user from response
+
+            await router.push({
+                name: "home",
+                query: { "loginSuccess": null }
+            })
+        }
+
     } catch (e) {
         if (e.hasOwnProperty("message")) {
             error.value = e.message
@@ -31,37 +34,41 @@ async function login() {
         }
         return
     }
-    reset(myForm.value.node)
     error.value = null
 }
 
 async function signup() {
-    console.log("Signup clicked!")
+    signupSuccess.value = false
     if (myForm.value === null) {
         return
     }
-    console.log(myForm.value.node.value)
+
+    const data = JSON.stringify({
+        "username": myForm.value.node.value.username,
+        "password": myForm.value.node.value.password
+    })
+
     try {
-        await fetch("https://localhost:8080/authenticaion/signup", {
+        const response = await fetch("http://localhost:8080/authentication/signup", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: {
-                "username": myForm.value.node.value.username,
-                "password": myForm.value.node.value.password
-            }
+            headers: { "Content-Type": "application/json" },
+            body: data
         })
+
+        if (response.ok) {
+            signupSuccess.value = true
+            error.value = null
+            return
+        }
+        error.value = await response.text()
+
     } catch (e) {
         if (e.hasOwnProperty("message")) {
             error.value = e.message
         } else {
             error.value = "Unknown error"
         }
-        return
     }
-    reset(myForm.value.node)
-    error.value = null
 }
 </script>
 
@@ -70,10 +77,14 @@ async function signup() {
         <div v-if="error !== null" class="alert alert-danger" role="alert">
             Error: {{ error }}
         </div>
+        <div v-if="signupSuccess" class="alert alert-success" role="alert">
+            Successfully signed up!
+        </div>
         <h2>Login</h2>
         <FormKit
             type="form"
             ref=myForm
+            @submit="login"
             :actions="false">
 
             <!-- Username min of 4 characters, only a-z, and only 1 underscore -->
@@ -100,7 +111,7 @@ async function signup() {
                     matches: 'Password must be at least 8 and not include a period (.)'
                 }"/>
             <div>
-                <FormKit type="button" label="Login" @click="login" />
+                <FormKit type="submit" label="Login" />
                 <FormKit type="button" label="Signup" @click="signup" />
             </div>
         </FormKit>
