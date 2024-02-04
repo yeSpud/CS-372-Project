@@ -75,6 +75,7 @@ async function signup() {
             type="form"
             ref=myForm
             :actions="false">
+
             <!-- Username min of 4 characters, only a-z, and only 1 underscore -->
             <FormKit
                 type="text"
@@ -82,16 +83,22 @@ async function signup() {
                 label="UID"
                 :validation="[['required'],['matches', /^(?=[a-z]*_?[a-z]*$)[a-z_]{4,}$/]]"
                 :validation-messages="{
-                    required: 'A password is required',
-                    matches: 'Password must be at least 4 characters of only lowercase letters and may have one underscore (_)'
+                    required: 'A username is required',
+                    matches: 'Username must be at least 4 characters of only lowercase letters and may have one underscore (_)'
                 }"
                 validation-visibility="live" />
+
+            <!-- Password requires at last 8 characters, with one capital, one lowercase, one number, and one special character (not including a period) -->
             <FormKit
                 type="password"
                 name="password"
                 label="pwd"
-                validation="required|min:8|contains_uppercase|contains_lowercase|contains_numeric|contains_symbol"
-                validation-visibility="live" />
+                :validation="[['required'],['contains_uppercase'],['contains_lowercase'],['contains_numeric'],['contains_symbol'],['matches', /^[^.]{8,}$/]]"
+                validation-visibility="live"
+                :validation-messages="{
+                    required: 'A password is required',
+                    matches: 'Password must be at least 8 and not include a period (.)'
+                }"/>
             <div>
                 <FormKit type="button" label="Login" @click="login" />
                 <FormKit type="button" label="Signup" @click="signup" />
