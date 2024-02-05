@@ -21,3 +21,7 @@ Once you clone the repository install [pnpm](https://pnpm.io/installation) and r
 To build and run the frontend `cd` into the `frontend` directory and run `pnpm dev`
 
 To start the backend `cd` into the `api` directory in `backend/api` and run `node src/index.js`
+
+### Requirement Gathering Priority List
+
+https://docs.google.com/document/d/1_UdpOFp0e80m-MXqDnSQkbh0jRoYqSOsT3qcSMhkk0s/edit?usp=sharing
