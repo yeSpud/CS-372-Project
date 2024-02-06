@@ -1,4 +1,5 @@
 const fastify = require("fastify")
+const enforceSchema = require("fastify-enforce-schema")
 const traps = require("@dnlup/fastify-traps")
 const fastifyCookie = require("@fastify/cookie")
 const fastifySession = require("@fastify/session")
@@ -24,6 +25,8 @@ async function build(opts = {}) {
             }
         }
     })
+
+    await server.register(enforceSchema)
 
     // We want a graceful exit when receiving SIGINT, so add fastify traps
     await server.register(traps, { strict: false })
