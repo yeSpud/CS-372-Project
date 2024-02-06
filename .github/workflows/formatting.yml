@@ -3,7 +3,7 @@ name: "Lint and formatting"
 on: [pull_request]
 
 jobs:
-    lint:
+    frontend-lint:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
@@ -23,7 +23,7 @@ jobs:
           working-directory: ./frontend
           run: pnpm lint
 
-    formatting:
+    frontend-formatting:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
@@ -42,3 +42,23 @@ jobs:
         - name: Run formatting
           working-directory: ./frontend
           run: pnpm prettier -c src/
+
+    backend-lint:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+        - name: Setup pnpm
+          uses: pnpm/action-setup@v2
+          with:
+            version: ^8.15.0
+        - name: Use Node.js 21
+          uses: actions/setup-node@v3
+          with:
+            node-version: 21
+            cache: 'pnpm'
+        - name: Install dependencies
+          run: pnpm install --frozen-lockfile
+        - name: Run lint
+          working-directory: ./backend/api
+          run: pnpm lint

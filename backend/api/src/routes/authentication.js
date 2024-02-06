@@ -1,5 +1,5 @@
 const { BadRequest } = require("http-errors")
-const { Login } = require("./schema/authentication");
+const { Login } = require("./schema/authentication")
 
 const routes = async function(fastify) {
 

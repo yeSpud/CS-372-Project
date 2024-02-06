@@ -1,4 +1,4 @@
-const authentication = require("./authentication");
+const authentication = require("./authentication")
 
 async function routes(fastify) {
     await fastify.register(authentication.routes, { prefix: "/authentication" })

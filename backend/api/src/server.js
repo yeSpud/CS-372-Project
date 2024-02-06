@@ -1,10 +1,10 @@
-const fastify = require("fastify");
-const traps = require("@dnlup/fastify-traps");
-const fastifyCookie = require("@fastify/cookie");
-const fastifySession = require("@fastify/session");
+const fastify = require("fastify")
+const traps = require("@dnlup/fastify-traps")
+const fastifyCookie = require("@fastify/cookie")
+const fastifySession = require("@fastify/session")
 const fastifyCors = require("@fastify/cors")
-const config = require("./config");
-const routes = require("./routes");
+const config = require("./config")
+const routes = require("./routes")
 
 async function build(opts = {}) {
     const server = fastify({ ...opts })
