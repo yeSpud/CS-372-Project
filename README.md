@@ -10,6 +10,7 @@ Check the [Projects](https://github.com/yeSpud/CS-372-Project/projects) tab
 * PNPM: Package management
 * Vue: Used for frontend
 * Fastify: Used for API backend
+* ESLint: Used for linting and build checks
 
 ## Potential technologies
 * Prisma: Used for interfacing with database
