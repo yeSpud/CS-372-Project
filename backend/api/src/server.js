@@ -7,7 +7,23 @@ const config = require("./config")
 const routes = require("./routes")
 
 async function build(opts = {}) {
-    const server = fastify({ ...opts })
+    const server = fastify({
+        ...opts,
+        ajv: {
+            customOptions: {
+                removeAdditional: "all",
+                strict: true,
+                strictNumbers: true,
+                strictSchema: true,
+                strictTypes: true,
+                coerceTypes: false,
+                strictRequired: true,
+                allErrors: true,
+                validateFormats: true,
+                validateSchema: true
+            }
+        }
+    })
 
     // We want a graceful exit when receiving SIGINT, so add fastify traps
     await server.register(traps, { strict: false })
