@@ -4,4 +4,4 @@ async function routes(fastify) {
     await fastify.register(authentication.routes, { prefix: "/authentication" })
 }
 
-module.exports = { routes }
+module.exports = routes

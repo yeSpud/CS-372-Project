@@ -1,5 +1,4 @@
 const fastify = require("fastify")
-const enforceSchema = require("fastify-enforce-schema")
 const traps = require("@dnlup/fastify-traps")
 const fastifyCookie = require("@fastify/cookie")
 const fastifySession = require("@fastify/session")
@@ -8,25 +7,7 @@ const config = require("./config")
 const routes = require("./routes")
 
 async function build(opts = {}) {
-    const server = fastify({
-        ...opts,
-        ajv: {
-            customOptions: {
-                removeAdditional: "all",
-                strict: true,
-                strictNumbers: true,
-                strictSchema: true,
-                strictTypes: true,
-                coerceTypes: false,
-                strictRequired: true,
-                allErrors: true,
-                validateFormats: true,
-                validateSchema: true
-            }
-        }
-    })
-
-    await server.register(enforceSchema)
+    const server = fastify({ ...opts })
 
     // We want a graceful exit when receiving SIGINT, so add fastify traps
     await server.register(traps, { strict: false })
@@ -46,7 +27,7 @@ async function build(opts = {}) {
     })
 
     // Register our routes
-    await server.register(routes.routes, {})
+    await server.register(routes, {})
 
     return server
 }

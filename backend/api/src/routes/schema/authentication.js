@@ -5,12 +5,12 @@ const Login = {
         username: Type.String(),
         password: Type.String()
     }),
-    response: Type.Object({
+    response: {
         "200": Type.Object({
             user: Type.String(),
             session: Type.String()
         })
-    })
+    }
 }
 
 module.exports = { Login }

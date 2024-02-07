@@ -10,7 +10,6 @@
 		"@fastify/session": "^10.7.0",
 		"@sinclair/typebox": "^0.32.13",
 		"fastify": "^4.25.2",
-		"fastify-enforce-schema": "^1.1.0",
 		"node": "^21.6.1"
 	},
 	"devDependencies": {
