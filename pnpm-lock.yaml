@@ -42,6 +42,19 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
 
+  backend/database:
+    dependencies:
+      lowdb:
+        specifier: ^7.0.1
+        version: 7.0.1
+    devDependencies:
+      eslint:
+        specifier: ^8.49.0
+        version: 8.56.0
+      eslint-plugin-import:
+        specifier: ^2.29.1
+        version: 2.29.1(eslint@8.56.0)
+
   frontend:
     dependencies:
       '@formkit/vue':
@@ -2451,6 +2464,13 @@ packages:
       get-func-name: 2.0.2
     dev: true
 
+  /lowdb@7.0.1:
+    resolution: {integrity: sha512-neJAj8GwF0e8EpycYIDFqEPcx9Qz4GUho20jWFR7YiFeXzF1YMLdxB36PypcTSPMA+4+LvgyMacYhlr18Zlymw==}
+    engines: {node: '>=18'}
+    dependencies:
+      steno: 4.0.2
+    dev: false
+
   /lru-cache@10.2.0:
     resolution: {integrity: sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==}
     engines: {node: 14 || >=16.14}
@@ -3147,6 +3167,11 @@ packages:
   /std-env@3.7.0:
     resolution: {integrity: sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==}
     dev: true
+
+  /steno@4.0.2:
+    resolution: {integrity: sha512-yhPIQXjrlt1xv7dyPQg2P17URmXbuM5pdGkpiMB3RenprfiBlvK415Lctfe0eshk90oA7/tNq7WEiMK8RSP39A==}
+    engines: {node: '>=18'}
+    dev: false
 
   /string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
