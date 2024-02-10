@@ -7,7 +7,6 @@ const Login = {
     }),
     response: {
         "200": Type.Object({
-            user: Type.String(),
             session: Type.String()
         })
     }
