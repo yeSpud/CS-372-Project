@@ -6,30 +6,28 @@ const routes = async function(fastify) {
 
     fastify.post("/login", { schema: Login }, async request => {
 
-        await database.read()
-        const user = database.data.find(u => u.username === request.body.username)
-
-        if (user === undefined) {
+        if (!await database.userInDatabase(request.body.username)) {
             throw new NotFound("That username does not exist. Please create an account.")
         }
 
-        for (const loginAttempt in user.loginAttempts) {
-            // TODO If attempt is older than 24 hours remove it.
+        await database.updateInvalidLoginAttempts(request.body.username)
+
+        const attempts = await database.getInvalidLoginAttempts(request.body.username)
+
+        if (attempts >= 5) {
+            throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
 
-        if (user.loginAttempts.loginAttempts >= 5) {
-            throw new TooManyRequests("Account is locked due to too many failed login attempts")
+        if (!await database.passwordMatches(request.body.username, request.body.password)) {
+            await database.addInvalidLoginAttempt(request.body.username)
+            throw new Unauthorized(`Incorrect password. ${5-(attempts+1)} attempts remaining.`)
         }
 
-        if (user.password !== request.body.password) {
-            throw new Unauthorized("Incorrect password")
-        }
-
-        // TODO Make a new session id in the database and return it
+        const session = await database.setSession(request.body.username)
 
         //return `Username: ${request.body.username}, Password: ${request.body.password}`
         //return { user: "", session: ""}
-        return { session: ""} // TODO return the session ID here as well as a cookie
+        return { session: session } // TODO return the session ID here as well as a cookie
     })
 
 }
