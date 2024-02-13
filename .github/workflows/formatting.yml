@@ -59,6 +59,9 @@ jobs:
             cache: 'pnpm'
         - name: Install dependencies
           run: pnpm install --frozen-lockfile
-        - name: Run lint
+        - name: Run api lint
           working-directory: ./backend/api
+          run: pnpm lint
+        - name: Run database lint
+          working-directory: ./backend/database
           run: pnpm lint

@@ -1,13 +1,15 @@
+const Type = require("@sinclair/typebox")
+
 const Login = {
-    body: {
-        type: "object",
-        properties: {
-            username: { type: "string" },
-            password: { type: "string" }
-        },
-        required: [ "username", "password" ]
-    },
-    response: { 200: { type: "string" } }
+    body: Type.Object({
+        username: Type.String(),
+        password: Type.String()
+    }),
+    response: {
+        "200": Type.Object({
+            session: Type.String()
+        })
+    }
 }
 
 module.exports = { Login }

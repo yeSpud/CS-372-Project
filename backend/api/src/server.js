@@ -17,7 +17,7 @@ async function build(opts = {}) {
     await server.register(fastifySession, {
         cookieName: "sessionId",
         cookie: { secure: config.env.NODE_ENV !== "development" },
-        secret: "a secret with minimum length of 32 characters"
+        secret: config.env.SECRET
     })
 
     // For this simple project we are going to disable cors
@@ -27,7 +27,7 @@ async function build(opts = {}) {
     })
 
     // Register our routes
-    await server.register(routes.routes, {})
+    await server.register(routes, {})
 
     return server
 }
