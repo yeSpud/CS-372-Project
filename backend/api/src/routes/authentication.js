@@ -3,6 +3,50 @@ const database = require("../../../database/index")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest } = require("http-errors")
 const crypto = require("crypto")
 
+// 4 character long minimum username only small letters, must have 1 underscore as only special character
+function usernameCheck(username) {
+    if (username.length < 4) {
+        throw new BadRequest("Username must be at least 4 characters")
+    }
+
+    const allLowerCaseCheck = RegExp("^[a-z]*$")
+    if (!allLowerCaseCheck.test(username)) {
+        throw new BadRequest("Username must be all lowercase")
+    }
+
+    if (username.split("_").length - 1 >= 2) {
+        throw new BadRequest("Only up to 1 underscore (_) allowed in username")
+    }
+}
+
+// Password should contain 8 characters, 1 capital, 1 small letter, 1 number, 1 special char, dot is not a special character
+function passwordCheck(password) {
+    if (password.length < 8) {
+        throw new BadRequest("Password must be at least 8 characters!")
+    }
+
+    const capitalCheck = RegExp("") // TODO
+    if (!capitalCheck.test(password)) {
+        throw new BadRequest("Password must contain at least 1 capital letter")
+    }
+
+    const lowercaseCheck = RegExp("") // TODO
+    if (!lowercaseCheck.test(password)) {
+        throw new BadRequest("Password must contain at least 1 lowercase letter")
+    }
+
+    const numberCheck = RegExp("") // TODO
+    if (!numberCheck.test(password)) {
+        throw new BadRequest("Password must contain at least 1 number")
+    }
+
+
+    const specialCharacterCheck = RegExp("") // TODO
+    if (!specialCharacterCheck.test(password)) {
+        throw new BadRequest("Password must contain at least 1 special character not including dot (.)")
+    }
+}
+
 const routes = async function(fastify) {
 
     fastify.post("/login", { schema: Login }, async (request, response) => {
@@ -18,21 +62,8 @@ const routes = async function(fastify) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
 
-
-        if (request.body.username.length < 4) {
-            throw new BadRequest("Username must be at least 4 characters")
-        }
-
-        const lowerCaseCheck = RegExp("^[a-z]*$")
-        if (!lowerCaseCheck.test(request.body.username)) {
-            throw new BadRequest("Username must be all lowercase")
-        }
-
-        if (request.body.username.split("_").length - 1 >= 2) {
-            throw new BadRequest("Only up to 1 underscore (_) allowed in username")
-        }
-
-        // TODO Make sure password matches regex!
+        usernameCheck(request.body.username)
+        passwordCheck(request.body.password)
 
         if (!await database.passwordMatches(request.body.username, request.body.password)) {
             await database.addInvalidLoginAttempt(request.body.username)
