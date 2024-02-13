@@ -50,6 +50,8 @@ const routes = async function(fastify) {
 
     fastify.post("/login", { schema: Login }, async (request, response) => {
 
+        usernameCheck(request.body.username)
+
         if (!await database.userInDatabase(request.body.username)) {
             throw new NotFound("That username does not exist. Please create an account.")
         }
@@ -61,7 +63,6 @@ const routes = async function(fastify) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
 
-        usernameCheck(request.body.username)
         passwordCheck(request.body.password)
 
         if (!await database.passwordMatches(request.body.username, request.body.password)) {
