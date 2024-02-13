@@ -50,7 +50,7 @@ async function addUserToDatabase(username, password) {
         session: null,
         loginAttempts: []
     })
-    await fs.writeFile(filePath, data)
+    await writeToDatabase(data)
 }
 
 async function userInDatabase(username) {
