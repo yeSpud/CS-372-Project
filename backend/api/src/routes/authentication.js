@@ -1,6 +1,6 @@
 const { Login } = require("./schema/authentication")
 const database = require("../../../database/index")
-const { NotFound, TooManyRequests, Unauthorized } = require("http-errors")
+const { NotFound, TooManyRequests, Unauthorized, BadRequest } = require("http-errors")
 const crypto = require("crypto")
 
 const routes = async function(fastify) {
@@ -16,6 +16,20 @@ const routes = async function(fastify) {
         const attempts = await database.getInvalidLoginAttempts(request.body.username)
         if (attempts.length >= 5) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
+        }
+
+
+        if (request.body.username.length < 4) {
+            throw new BadRequest("Username must be at least 4 characters")
+        }
+
+        const lowerCaseCheck = RegExp("^[a-z]*$")
+        if (!lowerCaseCheck.test(request.body.username)) {
+            throw new BadRequest("Username must be all lowercase")
+        }
+
+        if (request.body.username.split("_").length - 1 >= 2) {
+            throw new BadRequest("Only up to 1 underscore (_) allowed in username")
         }
 
         // TODO Make sure password matches regex!
