@@ -24,7 +24,7 @@ const routes = async function(fastify) {
             throw new Unauthorized(`Incorrect password. ${5-(attempts.length+1)} attempts remaining.`)
         }
 
-        const session = await database.setSession(request.body.username, request.cookies["sessionId"])
+        const session = await database.setSessionCookie(request.body.username, request.cookies["sessionId"])
 
         //return `Username: ${request.body.username}, Password: ${request.body.password}`
         //return { user: "", session: ""}

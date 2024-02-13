@@ -2,9 +2,36 @@ const fs = require("node:fs/promises")
 
 const filePath = "db.json"
 
+/* Database file schema:
+{
+    users: [
+        {
+            username: string,
+            password: string,
+            session: string | null
+            loginAttempts: [Date, ...]
+        },
+        {...}
+    ]
+}
+*/
+
 async function readFromDatabase() {
-    const data = await fs.readFile(filePath, "utf-8")
-    return JSON.parse(data) // Todo verify the json schema
+
+    let data
+    try {
+        // Todo verify the json schema
+        data = await fs.readFile(filePath, { encoding: "utf-8" })
+    } catch (e) {
+        data = JSON.stringify({users:[]})
+        await fs.writeFile(filePath, data)
+    }
+    return JSON.parse(data)
+}
+
+async function writeToDatabase(data) {
+    // Todo verify data is correct json schema
+    await fs.writeFile(filePath, JSON.stringify(data))
 }
 
 async function addUserToDatabase(username, password) {
@@ -73,11 +100,11 @@ async function updateInvalidLoginAttempts(username) {
     })
     user.loginAttempts = updatedLoginAttempts
 
-    // Todo check if the user is indeed updated...
-    await fs.writeFile(filePath, data)
+    // FIXME Not removing old login attempts!
+    await writeToDatabase(data)
 }
 
-async function getInvalidLoginAttempts(username) {
+async function getInvalidLoginAttempts(username) { // FIXME Always 1?
     const data = readFromDatabase()
     if (data === null || data.users === undefined) {
         return []
@@ -100,9 +127,7 @@ async function addInvalidLoginAttempt(username) {
     }
 
     user.loginAttempts.push(new Date())
-
-    // Todo check if the user is indeed updated...
-    await fs.writeFile(filePath, data)
+    await writeToDatabase(data)
 }
 
 async function setSessionCookie(username, sessionCookie) {
@@ -119,12 +144,10 @@ async function setSessionCookie(username, sessionCookie) {
 
     user.session = sessionCookie
 
-
     // Todo check if the user is indeed updated...
-    await fs.writeFile(filePath, data)
-
+    await writeToDatabase(data)
     return sessionCookie
 }
 
 module.exports = { createNewUser: addUserToDatabase, userInDatabase, passwordMatches, removeOldLoginAttempts: updateInvalidLoginAttempts,
-    getInvalidLoginAttempts, addInvalidLoginAttempt, setSession: setSessionCookie }
+    getInvalidLoginAttempts, addInvalidLoginAttempt, setSessionCookie: setSessionCookie }
