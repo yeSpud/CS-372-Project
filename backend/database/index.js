@@ -17,7 +17,6 @@ const filePath = "db.json"
 */
 
 async function readFromDatabase() {
-
     let data
     try {
         // Todo verify the json schema
@@ -51,7 +50,6 @@ async function addUserToDatabase(username, password) {
         session: null,
         loginAttempts: []
     })
-
     await fs.writeFile(filePath, data)
 }
 
@@ -65,7 +63,6 @@ async function userInDatabase(username) {
 }
 
 async function passwordMatches(username, password) {
-
     const data = await readFromDatabase()
     if (data === null || data.users === undefined) {
         return false
@@ -76,8 +73,7 @@ async function passwordMatches(username, password) {
 }
 
 async function updateInvalidLoginAttempts(username) {
-
-    let data = readFromDatabase()
+    let data = await readFromDatabase()
     if (data === null || data.users === undefined) {
         return
     }
@@ -94,18 +90,16 @@ async function updateInvalidLoginAttempts(username) {
         // 60 minutes in an hour
         // 60 seconds in a minute
         // 1000 ms in a second
-        if (currentDate -  loginAttempt.getTime() < (24 * 60 * 60 * 60 * 1000)) {
+        if (currentDate - new Date(loginAttempt).getTime() < (24 * 60 * 60 * 60 * 1000)) {
             updatedLoginAttempts.push(loginAttempt)
         }
     })
     user.loginAttempts = updatedLoginAttempts
-
-    // FIXME Not removing old login attempts!
     await writeToDatabase(data)
 }
 
-async function getInvalidLoginAttempts(username) { // FIXME Always 1?
-    const data = readFromDatabase()
+async function getInvalidLoginAttempts(username) {
+    const data = await readFromDatabase()
     if (data === null || data.users === undefined) {
         return []
     }
@@ -115,7 +109,6 @@ async function getInvalidLoginAttempts(username) { // FIXME Always 1?
 }
 
 async function addInvalidLoginAttempt(username) {
-
     let data = await readFromDatabase()
     if (data === null || data.users === undefined) {
         return
@@ -131,7 +124,6 @@ async function addInvalidLoginAttempt(username) {
 }
 
 async function setSessionCookie(username, sessionCookie) {
-
     let data = await readFromDatabase()
     if (data === null || data.users === undefined) {
         return
@@ -143,8 +135,6 @@ async function setSessionCookie(username, sessionCookie) {
     }
 
     user.session = sessionCookie
-
-    // Todo check if the user is indeed updated...
     await writeToDatabase(data)
     return sessionCookie
 }
