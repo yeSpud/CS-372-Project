@@ -25,23 +25,22 @@ function passwordCheck(password) {
         throw new BadRequest("Password must be at least 8 characters!")
     }
 
-    const capitalCheck = RegExp("") // TODO
+    const capitalCheck = RegExp("[A-Z]")
     if (!capitalCheck.test(password)) {
         throw new BadRequest("Password must contain at least 1 capital letter")
     }
 
-    const lowercaseCheck = RegExp("") // TODO
+    const lowercaseCheck = RegExp("[a-z]")
     if (!lowercaseCheck.test(password)) {
         throw new BadRequest("Password must contain at least 1 lowercase letter")
     }
 
-    const numberCheck = RegExp("") // TODO
+    const numberCheck = RegExp("\\d")
     if (!numberCheck.test(password)) {
         throw new BadRequest("Password must contain at least 1 number")
     }
 
-
-    const specialCharacterCheck = RegExp("") // TODO
+    const specialCharacterCheck = RegExp("[^a-zA-Z0-9\\s.]")
     if (!specialCharacterCheck.test(password)) {
         throw new BadRequest("Password must contain at least 1 special character not including dot (.)")
     }
