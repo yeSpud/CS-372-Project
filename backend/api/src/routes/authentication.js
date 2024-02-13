@@ -2,7 +2,6 @@ const { Login } = require("./schema/authentication")
 const database = require("../../../database/index")
 const { NotFound, TooManyRequests, Unauthorized } = require("http-errors")
 const crypto = require("crypto")
-const config = require("../config")
 
 const routes = async function(fastify) {
 
