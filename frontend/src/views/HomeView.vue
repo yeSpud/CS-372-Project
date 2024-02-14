@@ -26,7 +26,7 @@ onMounted(async () => {
     </div>
     <p style="color: white">TODO: Main page stuff</p>
     <RouterLink :to="{ name: 'login' }">Link to login page</RouterLink>
-    <p v-if="user !== null">Logged in as {{ user }}</p>
+    <p v-if="user !== null" style="color: white">Logged in as {{ user.username }}</p>
     <a v-if="user !== null" href="http://localhost:8080/authentication/logout">Logout</a>
   </main>
 </template>
