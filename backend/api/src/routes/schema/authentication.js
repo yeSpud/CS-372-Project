@@ -6,8 +6,8 @@ const Login = {
         password: Type.String()
     }),
     response: {
-        "200": Type.Object({
-            session: Type.String()
+        "301": Type.Object({
+            Location: Type.String()
         })
     }
 }

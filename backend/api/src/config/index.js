@@ -4,7 +4,8 @@ const env = {
     HTTP_TRUST_PROXY: "false",
     NODE_ENV: "development",
     CORS_URL: "http://localhost:5173",
-    SECRET: "a secret with minimum length of 32 characters"
+    SECRET: "a secret with minimum length of 32 characters",
+    BASE_FRONTEND_URL: "http://localhost:5173/"
 }
 
 module.exports = { env }
