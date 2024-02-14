@@ -70,8 +70,6 @@ const routes = async function(fastify) {
         }
 
         request.session.username = request.body.username
-
-        return { Location: env.BASE_FRONTEND_URL + "?loginSuccess" }
     })
 
 }

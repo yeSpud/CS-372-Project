@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue"
 
+import router from "@/router/index.js"
+
 const myForm = ref(null)
 const error = ref(null)
 const signupSuccess = ref(false)
@@ -16,8 +18,10 @@ async function login(credentials) {
     })
 
     if (response.ok) {
-      const redirectUrl = await response.json()
-      window.location.replace(redirectUrl.Location)
+      await router.push({
+        name: "home",
+        query: { loginSuccess: null }
+      })
     }
   } catch (e) {
     if (Object.prototype.hasOwnProperty.call(e, "message")) {

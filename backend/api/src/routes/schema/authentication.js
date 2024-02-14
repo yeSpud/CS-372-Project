@@ -5,11 +5,7 @@ const Login = {
         username: Type.String(),
         password: Type.String()
     }),
-    response: {
-        "301": Type.Object({
-            Location: Type.String()
-        })
-    }
+    response: { "200": Type.Null() }
 }
 
 module.exports = { Login }
