@@ -8,8 +8,7 @@ function usernameCheck(username) {
         throw new BadRequest("Username must be at least 4 characters")
     }
 
-    const allLowerCaseCheck = RegExp("^[a-z]*$")
-    if (!allLowerCaseCheck.test(username)) {
+    if (username !== username.toLowerCase()) {
         throw new BadRequest("Username must be all lowercase")
     }
 

@@ -11,6 +11,7 @@ async function login(credentials) {
   signupSuccess.value = false
   try {
     const response = await fetch("http://localhost:8080/authentication/login", {
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials)
@@ -48,6 +49,7 @@ async function signup() {
 
   try {
     const response = await fetch("http://localhost:8080/authentication/signup", {
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: data
