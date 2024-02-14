@@ -17,7 +17,7 @@ async function build(opts = {}) {
     await server.register(fastifySession, {
         cookieName: "sessionId",
         cookie: { secure: config.env.NODE_ENV !== "development" },
-        secret: config.env.SECRET
+        secret: config.env.SECRET,
     })
 
     // For this simple project we are going to disable cors
