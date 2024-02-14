@@ -7,14 +7,12 @@ const route = useRoute()
 const user = ref(null)
 
 onMounted(async () => {
-
   const response = await fetch("http://localhost:8080/users/@me", { credentials: "include" })
   if (response.ok) {
     user.value = await response.json()
   } else {
     user.value = null
   }
-
 })
 </script>
 
