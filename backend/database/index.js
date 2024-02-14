@@ -1,6 +1,24 @@
 const fs = require("node:fs/promises")
 const Type = require("@sinclair/typebox")
+const Ajv = require("ajv")
+const addFormats = require("ajv-formats")
 
+const ajv = addFormats(new Ajv({ removeAdditional: "all" }), [
+    "date-time",
+    "time",
+    "date",
+    "email",
+    "hostname",
+    "ipv4",
+    "ipv6",
+    "uri",
+    "uri-reference",
+    "uuid",
+    "uri-template",
+    "json-pointer",
+    "relative-json-pointer",
+    "regex"
+])
 const filePath = "db.json"
 
 /* Database file schema:
@@ -16,28 +34,42 @@ const filePath = "db.json"
     ]
 }
 */
-
-const UserSchema = Type.Object({
-    username: Type.String(),
-    password: Type.String(),
-    session: Type.Union([Type.String(), Type.Null(),]),
-    loginAttempts: Type.Array(Type.Date())
+const DatabaseSchema = Type.Object({
+    users: Type.Array(Type.Object({
+        username: Type.String(),
+        password: Type.String(),
+        session: Type.Union([Type.String(), Type.Null(),]),
+        loginAttempts: Type.Array(Type.String({format: "date-time"}))
+    }))
 })
 
 async function readFromDatabase() {
     let data
     try {
-        // Todo verify the json schema
-        data = await fs.readFile(filePath, { encoding: "utf-8" })
+        const read = await fs.readFile(filePath, { encoding: "utf-8" })
+        data = JSON.parse(read)
     } catch (e) {
-        data = JSON.stringify({users:[]})
-        await fs.writeFile(filePath, data)
+        data = { users: [] }
+        await writeToDatabase(data)
     }
-    return JSON.parse(data)
+
+    const validate = ajv.compile(DatabaseSchema)
+    const valid = validate(data)
+    if (!valid) {
+        console.error(ajv.errors)
+        throw new Error(`Data does not match database schema!\n${JSON.stringify(data)}`)
+    }
+
+    return data
 }
 
 async function writeToDatabase(data) {
-    // Todo verify data is correct json schema
+    const validate = ajv.compile(DatabaseSchema)
+    const valid = validate(data)
+    if (!valid) {
+        console.error(ajv.errors)
+        throw new Error(`Data does not match database schema!\n${JSON.stringify(data)}`)
+    }
     await fs.writeFile(filePath, JSON.stringify(data))
 }
 
@@ -147,5 +179,5 @@ async function setSessionCookie(username, sessionCookie) {
     return sessionCookie
 }
 
-module.exports = { createNewUser: addUserToDatabase, userInDatabase, passwordMatches, removeOldLoginAttempts: updateInvalidLoginAttempts,
+module.exports = { addUserToDatabase, userInDatabase, passwordMatches, removeOldLoginAttempts: updateInvalidLoginAttempts,
     getInvalidLoginAttempts, addInvalidLoginAttempt, setSessionCookie: setSessionCookie }
