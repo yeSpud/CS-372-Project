@@ -9,7 +9,9 @@ const routes = async function(fastify) {
             const username = await database.getUser(request.session.sessionId)
             return { username: username }
         } catch (e) {
-            throw new Unauthorized("You need to be logged in first")
+            if (e.message === "User does not exist in database") {
+                throw new Unauthorized("You need to be logged in first")
+            }
         }
     })
 

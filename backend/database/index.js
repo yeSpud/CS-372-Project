@@ -177,5 +177,19 @@ async function setSessionCookie(username, sessionCookie) {
     return sessionCookie
 }
 
+async function getUser(sessionId) {
+    let data = await readFromDatabase()
+    if (data === null || data.users === undefined) {
+        throw new Error("Database error")
+    }
+
+    const user = data.users.find(u => u.session === sessionId)
+    if (user === undefined) {
+        throw new Error("User does not exist in database")
+    }
+
+    return user.username
+}
+
 module.exports = { addUserToDatabase, userInDatabase, passwordMatches, removeOldLoginAttempts: updateInvalidLoginAttempts,
-    getInvalidLoginAttempts, addInvalidLoginAttempt, setSessionCookie: setSessionCookie }
+    getInvalidLoginAttempts, addInvalidLoginAttempt, setSessionCookie: setSessionCookie, getUser }
