@@ -48,7 +48,7 @@ function passwordCheck(password) {
 
 const routes = async function(fastify) {
 
-    fastify.post("/login", { schema: Login }, async (request, response) => {
+    fastify.post("/login", { schema: Login }, async request => {
 
         usernameCheck(request.body.username)
 
@@ -70,15 +70,7 @@ const routes = async function(fastify) {
             throw new Unauthorized(`Incorrect password. ${5-(attempts.length+1)} attempts remaining.`)
         }
 
-        // FIXME Figure out how to require cookies be sent and returned PROPERLY
-        let cookie = request.cookies["sessionId"]
-        if (cookie === undefined) {
-
-            // I am aware that this is a TERRIBLE way to generate session IDs, but it'll do for now...
-            cookie = crypto.createHash("sha256").update(request.body.username + new Date().getTime() + Math.random()).digest("base64")
-            response.setCookie("sessionId", cookie)
-        }
-        const session = await database.setSessionCookie(request.body.username, cookie)
+        const session = await database.setSessionCookie(request.body.username, request.session.sessionId)
 
         return { session: session }
     })
