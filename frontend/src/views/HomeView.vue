@@ -1,7 +1,21 @@
 <script setup>
+import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 
 const route = useRoute()
+
+const user = ref(null)
+
+onMounted(async () => {
+
+  const response = await fetch("http://localhost:8080/users/@me")
+  if (response.ok) {
+    user.value = await response.json()
+  } else {
+    user.value = null
+  }
+
+})
 </script>
 
 <template>
@@ -13,5 +27,7 @@ const route = useRoute()
     TODO: Main page stuff
     <br />
     <RouterLink :to="{ name: 'login' }">Link to login page</RouterLink>
+    <p v-if="user !== null">Logged in as {{ user }}</p>
+    <a v-if="user !== null" href="http://localhost:8080/authentication/logout">Logout</a>
   </main>
 </template>
