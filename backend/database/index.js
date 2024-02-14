@@ -1,4 +1,5 @@
 const fs = require("node:fs/promises")
+const Type = require("@sinclair/typebox")
 
 const filePath = "db.json"
 
@@ -15,6 +16,13 @@ const filePath = "db.json"
     ]
 }
 */
+
+const UserSchema = Type.Object({
+    username: Type.String(),
+    password: Type.String(),
+    session: Type.Union([Type.String(), Type.Null(),]),
+    loginAttempts: Type.Array(Type.Date())
+})
 
 async function readFromDatabase() {
     let data
