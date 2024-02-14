@@ -43,6 +43,15 @@ const DatabaseSchema = Type.Object({
     }))
 })
 
+function validateJsonData(data) {
+    const validate = ajv.compile(DatabaseSchema)
+    const valid = validate(data)
+    if (!valid) {
+        console.error(ajv.errors)
+        throw new Error(`Data does not match database schema!\n${JSON.stringify(data)}`)
+    }
+}
+
 async function readFromDatabase() {
     let data
     try {
@@ -53,23 +62,12 @@ async function readFromDatabase() {
         await writeToDatabase(data)
     }
 
-    const validate = ajv.compile(DatabaseSchema)
-    const valid = validate(data)
-    if (!valid) {
-        console.error(ajv.errors)
-        throw new Error(`Data does not match database schema!\n${JSON.stringify(data)}`)
-    }
-
+    validateJsonData(data)
     return data
 }
 
 async function writeToDatabase(data) {
-    const validate = ajv.compile(DatabaseSchema)
-    const valid = validate(data)
-    if (!valid) {
-        console.error(ajv.errors)
-        throw new Error(`Data does not match database schema!\n${JSON.stringify(data)}`)
-    }
+    validateJsonData(data)
     await fs.writeFile(filePath, JSON.stringify(data))
 }
 
