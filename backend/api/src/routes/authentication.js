@@ -1,7 +1,6 @@
 const { Login } = require("./schema/authentication")
 const database = require("../../../database/index")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest } = require("http-errors")
-const { env } = require("../config")
 
 // 4 character long minimum username only small letters, must have 1 underscore as only special character
 function usernameCheck(username) {
