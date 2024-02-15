@@ -4,7 +4,7 @@ import { ref } from "vue"
 import router from "@/router/index.js"
 
 const myForm = ref(null)
-const error = ref(null)
+const error = ref("")
 const signupSuccess = ref(false)
 
 async function login(credentials) {
@@ -18,10 +18,14 @@ async function login(credentials) {
     })
 
     if (response.ok) {
+      error.value = ""
       await router.push({
         name: "home",
         query: { loginSuccess: null }
       })
+    } else {
+      const json = await response.json()
+      error.value = json.message
     }
   } catch (e) {
     if (Object.prototype.hasOwnProperty.call(e, "message")) {
@@ -29,9 +33,7 @@ async function login(credentials) {
     } else {
       error.value = "Unknown error"
     }
-    return
   }
-  error.value = null
 }
 
 async function signup() {
@@ -55,10 +57,11 @@ async function signup() {
 
     if (response.ok) {
       signupSuccess.value = true
-      error.value = null
-      return
+      error.value = ""
+    } else {
+      const json = await response.json()
+      error.value = json.message
     }
-    error.value = await response.text()
   } catch (e) {
     if (Object.prototype.hasOwnProperty.call(e, "message")) {
       error.value = e.message
@@ -71,7 +74,7 @@ async function signup() {
 
 <template>
   <main class="container">
-    <div v-if="error !== null" class="alert alert-danger" role="alert">Error: {{ error }}</div>
+    <div v-if="error !== ''" class="alert alert-danger" role="alert">Error: {{ error }}</div>
     <div v-if="signupSuccess" class="alert alert-success" role="alert">Successfully signed up!</div>
     <h2 align="center">Login</h2>
     <FormKit class="form-group" type="form" ref="myForm" @submit="login" :actions="false">
