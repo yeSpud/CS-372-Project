@@ -154,7 +154,7 @@ async function addInvalidLoginAttempt(username) {
         return
     }
 
-    user.loginAttempts.push(new Date())
+    user.loginAttempts.push(new Date().toISOString())
     await writeToDatabase(data)
 }
 
