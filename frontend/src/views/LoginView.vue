@@ -23,8 +23,7 @@ async function login(credentials) {
         name: "home",
         query: { loginSuccess: null }
       })
-    }
-    else {
+    } else {
       const json = await response.json()
       error.value = json.message
     }
