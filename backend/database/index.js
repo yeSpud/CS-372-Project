@@ -27,7 +27,6 @@ const filePath = "db.json"
         {
             username: string,
             password: string,
-            session: string | null
             loginAttempts: [Date, ...]
         },
         {...}
@@ -38,7 +37,6 @@ const DatabaseSchema = Type.Object({
     users: Type.Array(Type.Object({
         username: Type.String(),
         password: Type.String(),
-        session: Type.Union([Type.String(), Type.Null(),]),
         loginAttempts: Type.Array(Type.String({format: "date-time"}))
     }))
 })
@@ -85,7 +83,6 @@ async function addUserToDatabase(username, password) {
     data.users.push({
         username: username,
         password: password,
-        session: null,
         loginAttempts: []
     })
     await writeToDatabase(data)
@@ -161,21 +158,5 @@ async function addInvalidLoginAttempt(username) {
     await writeToDatabase(data)
 }
 
-async function setSessionCookie(username, sessionCookie) {
-    let data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
-        return
-    }
-
-    const user = data.users.find(u => u.username === username)
-    if (user === undefined) {
-        return
-    }
-
-    user.session = sessionCookie
-    await writeToDatabase(data)
-    return sessionCookie
-}
-
 module.exports = { addUserToDatabase, userInDatabase, passwordMatches, removeOldLoginAttempts: updateInvalidLoginAttempts,
-    getInvalidLoginAttempts, addInvalidLoginAttempt, setSessionCookie: setSessionCookie }
+    getInvalidLoginAttempts, addInvalidLoginAttempt }

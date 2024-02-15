@@ -1,7 +1,6 @@
 const { Login } = require("./schema/authentication")
 const database = require("../../../database/index")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest } = require("http-errors")
-const crypto = require("crypto")
 
 // 4 character long minimum username only small letters, must have 1 underscore as only special character
 function usernameCheck(username) {
@@ -9,8 +8,7 @@ function usernameCheck(username) {
         throw new BadRequest("Username must be at least 4 characters")
     }
 
-    const allLowerCaseCheck = RegExp("^[a-z]*$")
-    if (!allLowerCaseCheck.test(username)) {
+    if (username !== username.toLowerCase()) {
         throw new BadRequest("Username must be all lowercase")
     }
 
@@ -48,7 +46,7 @@ function passwordCheck(password) {
 
 const routes = async function(fastify) {
 
-    fastify.post("/login", { schema: Login }, async (request, response) => {
+    fastify.post("/login", { schema: Login }, async request => {
 
         usernameCheck(request.body.username)
 
@@ -70,17 +68,7 @@ const routes = async function(fastify) {
             throw new Unauthorized(`Incorrect password. ${5-(attempts.length+1)} attempts remaining.`)
         }
 
-        // FIXME Figure out how to require cookies be sent and returned PROPERLY
-        let cookie = request.cookies["sessionId"]
-        if (cookie === undefined) {
-
-            // I am aware that this is a TERRIBLE way to generate session IDs, but it'll do for now...
-            cookie = crypto.createHash("sha256").update(request.body.username + new Date().getTime() + Math.random()).digest("base64")
-            response.setCookie("sessionId", cookie)
-        }
-        const session = await database.setSessionCookie(request.body.username, cookie)
-
-        return { session: session }
+        request.session.username = request.body.username
     })
 
 }

@@ -23,7 +23,7 @@ async function build(opts = {}) {
     // For this simple project we are going to disable cors
     await server.register(fastifyCors, {
         origin: config.env.CORS_URL,
-        //credentials: true
+        credentials: true
     })
 
     // Register our routes

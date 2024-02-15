@@ -11,14 +11,13 @@ async function login(credentials) {
   signupSuccess.value = false
   try {
     const response = await fetch("http://localhost:8080/authentication/login", {
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials)
     })
 
     if (response.ok) {
-      // TODO Set user from response
-
       await router.push({
         name: "home",
         query: { loginSuccess: null }
@@ -48,6 +47,7 @@ async function signup() {
 
   try {
     const response = await fetch("http://localhost:8080/authentication/signup", {
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: data
