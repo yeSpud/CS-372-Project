@@ -58,7 +58,6 @@ async function signup() {
     if (response.ok) {
       signupSuccess.value = true
       error.value = ""
-      return
     } else {
       const json = await response.json()
       error.value = json.message
