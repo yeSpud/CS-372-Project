@@ -16,4 +16,4 @@ const Signup = { //json schemea
     response: { "201": Type.Null() }
 }
 
-module.exports = { Login }
+module.exports = { Login, Signup }
