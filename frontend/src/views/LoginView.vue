@@ -18,13 +18,12 @@ async function login(credentials) {
     })
 
     if (response.ok) {
-      error.value  = ""
+      error.value = ""
       await router.push({
         name: "home",
         query: { loginSuccess: null }
       })
-    }
-    else {
+    } else {
       const json = await response.json()
       error.value = json.message
     }
@@ -60,8 +59,7 @@ async function signup() {
       signupSuccess.value = true
       error.value = ""
       return
-    }
-    else {
+    } else {
       const json = await response.json()
       error.value = json.message
     }
