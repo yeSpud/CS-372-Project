@@ -8,4 +8,12 @@ const Login = {
     response: { "200": Type.Null() }
 }
 
-module.exports = { Login }
+const Signup = { //json schemea
+    body: Type.Object({
+        username: Type.String(),
+        password: Type.String()
+    }),
+    response: { "201": Type.Null() }
+}
+
+module.exports = { Login, Signup }
