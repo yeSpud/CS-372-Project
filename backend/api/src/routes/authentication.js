@@ -1,6 +1,7 @@
-const { Login, Signup } = require("./schema/authentication")
+const { Login, Signup, Signout } = require("./schema/authentication")
 const database = require("../../../database/index")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
+const {env} = require("../config")
 
 // 4 character long minimum username only small letters, must have 1 underscore as only special character
 function usernameCheck(username) {
@@ -81,6 +82,10 @@ const routes = async function(fastify) {
         response.code(201)
     })
 
+    fastify.get("/signout", { schema: Signout }, async (request, response) => {
+        request.session.destroy()
+        response.redirect(308, env.CORS_URL + "/login") 
+    })
 }
 
 module.exports = { routes }
