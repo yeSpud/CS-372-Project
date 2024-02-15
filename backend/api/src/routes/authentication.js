@@ -1,6 +1,6 @@
-const { Login } = require("./schema/authentication")
+const { Login, Signup } = require("./schema/authentication")
 const database = require("../../../database/index")
-const { NotFound, TooManyRequests, Unauthorized, BadRequest } = require("http-errors")
+const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
 
 // 4 character long minimum username only small letters, must have 1 underscore as only special character
 function usernameCheck(username) {
@@ -69,6 +69,16 @@ const routes = async function(fastify) {
         }
 
         request.session.username = request.body.username
+    })
+
+    fastify.post("/signup", { schema: Signup }, async (request, response) => {
+        usernameCheck(request.body.username)
+        passwordCheck(request.body.password) 
+        if (await database.userInDatabase(request.body.username)) {
+            throw new Conflict("That username is already in use, please choose another.")
+        }
+        await database.addUserToDatabase(request.body.username, request.body.password)
+        response.code(201)
     })
 
 }
