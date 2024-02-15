@@ -18,7 +18,7 @@ async function login(credentials) {
     })
 
     if (response.ok) {
-      error.value  = ""
+      error.value = ""
       await router.push({
         name: "home",
         query: { loginSuccess: null }
