@@ -74,9 +74,9 @@ async function signup() {
 
 <template>
   <main class="container">
+    <h2 align="center" style="color: white">Login</h2>
     <div v-if="error !== ''" class="alert alert-danger" role="alert">Error: {{ error }}</div>
     <div v-if="signupSuccess" class="alert alert-success" role="alert">Successfully signed up!</div>
-    <h2 align="center">Login</h2>
     <FormKit class="form-group" type="form" ref="myForm" @submit="login" :actions="false">
       <!-- Username min of 4 characters, only a-z, and only 1 underscore -->
       <FormKit
@@ -84,11 +84,17 @@ async function signup() {
         name="username"
         label="UID"
         input-class="form-control"
-        :validation="[['required'], ['matches', /^(?=[a-z]*_?[a-z]*$)[a-z_]{4,}$/]]"
+        :validation="[
+          ['required'],
+          ['customLowercase'],
+          ['characterCount', '_', 0, 1],
+          ['characterMin', 4]
+        ]"
         :validation-messages="{
           required: 'A username is required',
-          matches:
-            'Username must be at least 4 characters of only lowercase letters and may have one underscore (_)'
+          customLowercase: 'Username must be all lowercase (and can include an underscore)',
+          characterCount: 'Username can only contain up to one underscore (_)',
+          characterMin: 'Username must be at least 4 characters long'
         }"
         validation-visibility="live"
       />
@@ -101,16 +107,22 @@ async function signup() {
         input-class="form-control"
         :validation="[
           ['required'],
-          ['contains_uppercase'],
-          ['contains_lowercase'],
-          ['contains_numeric'],
-          ['contains_symbol'],
-          ['matches', /^[^.]{8,}$/]
+          ['*+contains_uppercase'],
+          ['*+contains_lowercase'],
+          ['*+contains_numeric'],
+          ['*+contains_symbol'],
+          ['characterMin', 8],
+          ['*+matches', /^[^.]*$/]
         ]"
         validation-visibility="live"
         :validation-messages="{
           required: 'A password is required',
-          matches: 'Password must be at least 8 and not include a period (.)'
+          contains_uppercase: 'Password must contain an uppercase letter',
+          contains_lowercase: 'Password must contain a lowercase letter',
+          contains_numeric: 'Password must contain a number',
+          contains_symbol: 'Password must contain a symbol (not including a period)',
+          characterMin: 'Password must be at least 8 characters long',
+          matches: 'Password must not include a period'
         }"
       />
       <div class="row btn-group btn-group-lg" role="group">
@@ -124,5 +136,9 @@ async function signup() {
 <style>
 body {
   background-color: #b7410e;
+}
+li,
+label {
+  color: white;
 }
 </style>

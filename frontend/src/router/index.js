@@ -10,7 +10,15 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView
+      component: HomeView,
+      beforeEnter: (to, from) => {
+        if (from.name === "login") {
+          return
+        }
+        const newQuery = to.query
+        delete newQuery.loginSuccess
+        to.query = newQuery
+      }
     },
     {
       path: "/login",
