@@ -107,12 +107,12 @@ async function signup() {
         input-class="form-control"
         :validation="[
           ['required'],
-          ['contains_uppercase'],
-          ['contains_lowercase'],
-          ['contains_numeric'],
-          ['contains_symbol'],
+          ['*+contains_uppercase'],
+          ['*+contains_lowercase'],
+          ['*+contains_numeric'],
+          ['*+contains_symbol'],
           ['characterMin', 8],
-          ['matches', /^[^.]*$/]
+          ['*+matches', /^[^.]*$/]
         ]"
         validation-visibility="live"
         :validation-messages="{

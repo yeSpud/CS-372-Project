@@ -72,7 +72,7 @@ async function writeToDatabase(data) {
 async function addUserToDatabase(username, password) {
 
     let data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
+    if (data == null) {
         throw new Error("Database not initialized correctly and is in a corrupted state!")
     }
 
@@ -90,7 +90,7 @@ async function addUserToDatabase(username, password) {
 
 async function userInDatabase(username) {
     const data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
+    if (data == null) {
         return false
     }
 
@@ -99,7 +99,7 @@ async function userInDatabase(username) {
 
 async function passwordMatches(username, password) {
     const data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
+    if (data == null) {
         return false
     }
 
@@ -109,7 +109,7 @@ async function passwordMatches(username, password) {
 
 async function updateInvalidLoginAttempts(username) {
     let data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
+    if (data == null) {
         return
     }
 
@@ -135,7 +135,7 @@ async function updateInvalidLoginAttempts(username) {
 
 async function getInvalidLoginAttempts(username) {
     const data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
+    if (data == null) {
         return []
     }
 
@@ -145,7 +145,7 @@ async function getInvalidLoginAttempts(username) {
 
 async function addInvalidLoginAttempt(username) {
     let data = await readFromDatabase()
-    if (data === null || data.users === undefined) {
+    if (data == null) {
         return
     }
 
