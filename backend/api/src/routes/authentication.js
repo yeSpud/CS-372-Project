@@ -84,7 +84,7 @@ const routes = async function(fastify) {
 
     fastify.get("/signout", { schema: Signout }, async (request, response) => {
         request.session.destroy()
-        response.redirect(308, env.CORS_URL + "/login") 
+        response.redirect(302, env.CORS_URL + "/login")
     })
 }
 
