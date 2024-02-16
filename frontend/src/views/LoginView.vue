@@ -84,11 +84,17 @@ async function signup() {
         name="username"
         label="UID"
         input-class="form-control"
-        :validation="[['required'], ['matches', /^(?=[a-z]*_?[a-z]*$)[a-z_]{4,}$/]]"
+        :validation="[
+          ['required'],
+          ['customLowercase'],
+          ['characterCount', '_', 0, 1],
+          ['characterMin', 4]
+        ]"
         :validation-messages="{
           required: 'A username is required',
-          matches:
-            'Username must be at least 4 characters of only lowercase letters and may have one underscore (_)'
+          customLowercase: 'Username must be all lowercase (and can include an underscore)',
+          characterCount: 'Username can only contain up to one underscore (_)',
+          characterMin: 'Username must be at least 4 characters long'
         }"
         validation-visibility="live"
       />
@@ -105,12 +111,18 @@ async function signup() {
           ['contains_lowercase'],
           ['contains_numeric'],
           ['contains_symbol'],
-          ['matches', /^[^.]{8,}$/]
+          ['characterMin', 8],
+          ['matches', /^[^.]*$/]
         ]"
         validation-visibility="live"
         :validation-messages="{
           required: 'A password is required',
-          matches: 'Password must be at least 8 and not include a period (.)'
+          contains_uppercase: 'Password must contain an uppercase letter',
+          contains_lowercase: 'Password must contain a lowercase letter',
+          contains_numeric: 'Password must contain a number',
+          contains_symbol: 'Password must contain a symbol (not including a period)',
+          characterMin: 'Password must be at least 8 characters long',
+          matches: 'Password must not include a period'
         }"
       />
       <div class="row btn-group btn-group-lg" role="group">
