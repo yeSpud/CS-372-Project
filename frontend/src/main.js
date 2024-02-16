@@ -2,7 +2,7 @@ import { defaultConfig, plugin } from "@formkit/vue"
 import { createPinia } from "pinia"
 import { createApp } from "vue"
 
-import { characterCount,characterMin, customLowercase } from "@/util.js"
+import { characterCount, characterMin, customLowercase } from "@/util.js"
 
 import App from "./App.vue"
 import router from "./router"

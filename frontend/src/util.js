@@ -1,4 +1,4 @@
-const characterMin = function(node, length) {
+const characterMin = function (node, length) {
   if (node.value == null) {
     return false
   }
@@ -9,7 +9,7 @@ characterMin.skipEmpty = false
 characterMin.debounce = 20
 characterMin.force = true
 
-const customLowercase = function(node) {
+const customLowercase = function (node) {
   if (node.value == null) {
     return false
   }
@@ -21,11 +21,11 @@ customLowercase.skipEmpty = false
 customLowercase.debounce = 20
 customLowercase.force = true
 
-const characterCount = function(node, character, min, max) {
+const characterCount = function (node, character, min, max) {
   if (node.value == null) {
     return false
   }
-  const characterOccurrence = (node.value.split(character).length - 1)
+  const characterOccurrence = node.value.split(character).length - 1
   return characterOccurrence >= min && characterOccurrence <= max
 }
 characterCount.blocking = true

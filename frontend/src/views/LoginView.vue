@@ -137,7 +137,8 @@ async function signup() {
 body {
   background-color: #b7410e;
 }
-li, label {
-  color: white
+li,
+label {
+  color: white;
 }
 </style>
