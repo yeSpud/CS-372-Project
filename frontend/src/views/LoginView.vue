@@ -74,9 +74,9 @@ async function signup() {
 
 <template>
   <main class="container">
+    <h2 align="center" style="color: white">Login</h2>
     <div v-if="error !== ''" class="alert alert-danger" role="alert">Error: {{ error }}</div>
     <div v-if="signupSuccess" class="alert alert-success" role="alert">Successfully signed up!</div>
-    <h2 align="center">Login</h2>
     <FormKit class="form-group" type="form" ref="myForm" @submit="login" :actions="false">
       <!-- Username min of 4 characters, only a-z, and only 1 underscore -->
       <FormKit
@@ -136,5 +136,8 @@ async function signup() {
 <style>
 body {
   background-color: #b7410e;
+}
+li, label {
+  color: white
 }
 </style>
