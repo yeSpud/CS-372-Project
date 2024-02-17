@@ -17,7 +17,7 @@ const Signup = { //json schemea
 }
 
 const Signout = {
-    response: { "308": Type.Null() }
+    response: { "302": Type.Null() }
 }
 
 module.exports = { Login, Signup, Signout }
