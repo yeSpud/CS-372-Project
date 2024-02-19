@@ -1,3 +1,5 @@
+//define json schema: user
+
 const Type = require("@sinclair/typebox")
 
 const User = {

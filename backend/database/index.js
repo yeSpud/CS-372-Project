@@ -1,3 +1,8 @@
+// define database json schema, 
+// define functions: validateJsonData, readFromDatabase, writeToDatabase, 
+// addUserToDatabase, userInDatabase, passwordMatches, updateInvalidLoginAttempts, 
+// getInvalidLoginAttempts, addInvalidLoginAttempt
+
 const fs = require("node:fs/promises")
 const Type = require("@sinclair/typebox")
 const Ajv = require("ajv")

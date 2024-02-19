@@ -1,3 +1,5 @@
+// defines a Pinia store named "counter", can increment the count and has a doublecount property
+
 import { defineStore } from "pinia"
 import { computed, ref } from "vue"
 

@@ -1,3 +1,5 @@
+// adds prefixes to all authentication and user routes
+
 const authentication = require("./authentication")
 const users = require("./users")
 

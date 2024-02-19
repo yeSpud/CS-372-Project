@@ -1,3 +1,5 @@
+// Starts fastify webserver, logs errors
+
 const server = require("./server")
 const config = require("./config");
 

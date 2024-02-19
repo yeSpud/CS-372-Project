@@ -1,3 +1,5 @@
+// define fastify route: User.GET, retrieve user info or throw if not logged in
+
 const { User } = require("./schema/users")
 const { Unauthorized } = require("http-errors")
 
