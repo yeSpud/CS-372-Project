@@ -1,3 +1,5 @@
+//sets up fastify server with imported plugins routes
+
 const fastify = require("fastify")
 const traps = require("@dnlup/fastify-traps")
 const fastifyCookie = require("@fastify/cookie")

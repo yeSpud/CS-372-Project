@@ -1,3 +1,5 @@
+// define json schemas: Login, Signup, Signout
+
 const Type = require("@sinclair/typebox")
 
 const Login = {
@@ -8,7 +10,7 @@ const Login = {
     response: { "200": Type.Null() }
 }
 
-const Signup = { //json schemea
+const Signup = { 
     body: Type.Object({
         username: Type.String(),
         password: Type.String()

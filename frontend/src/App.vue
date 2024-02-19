@@ -1,3 +1,5 @@
+<!-- template example, unused -->
+
 <script setup>
 import { RouterView } from "vue-router"
 </script>

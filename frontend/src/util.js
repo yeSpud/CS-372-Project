@@ -1,3 +1,5 @@
+// custom functions for username and password requrements
+
 const characterMin = function (node, length) {
   if (node.value == null) {
     return false

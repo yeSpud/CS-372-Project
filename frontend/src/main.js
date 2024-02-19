@@ -1,3 +1,5 @@
+// imports stuff needed for vue and related plugins
+
 import { defaultConfig, plugin } from "@formkit/vue"
 import { createPinia } from "pinia"
 import { createApp } from "vue"

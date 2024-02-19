@@ -1,3 +1,5 @@
+// define login check funtions, fastify route handling: login, signup, signout
+
 const { Login, Signup, Signout } = require("./schema/authentication")
 const database = require("../../../database/index")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
@@ -55,7 +57,7 @@ const routes = async function(fastify) {
             throw new NotFound("That username does not exist. Please create an account.")
         }
 
-        await database.removeOldLoginAttempts(request.body.username)
+        await database.removeOldLoginAttempts(request.body.username) // calls updateInvalidLoginAttempts
 
         const attempts = await database.getInvalidLoginAttempts(request.body.username)
         if (attempts.length >= 5) {

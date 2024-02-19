@@ -1,3 +1,6 @@
+// makes a vue router that uses "/" for the home page and "/login" for the login page
+// deletes loginSuccess query when going to home page from anywhere but the login page
+
 import { createRouter, createWebHistory } from "vue-router"
 
 import LoginView from "@/views/LoginView.vue"

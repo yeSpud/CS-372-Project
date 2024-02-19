@@ -1,3 +1,5 @@
+<!-- Vue code for the home page, has a login link and when user is logged in, has a hyperlink to logout-->
+
 <script setup>
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
