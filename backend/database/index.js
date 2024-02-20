@@ -163,5 +163,5 @@ async function addInvalidLoginAttempt(username) {
     await writeToDatabase(data)
 }
 
-module.exports = { addUserToDatabase, userInDatabase, passwordMatches, removeOldLoginAttempts: updateInvalidLoginAttempts,
+module.exports = { addUserToDatabase, userInDatabase, passwordMatches, updateInvalidLoginAttempts,
     getInvalidLoginAttempts, addInvalidLoginAttempt }

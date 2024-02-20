@@ -57,7 +57,7 @@ const routes = async function(fastify) {
             throw new NotFound("That username does not exist. Please create an account.")
         }
 
-        await database.removeOldLoginAttempts(request.body.username) // calls updateInvalidLoginAttempts
+        await database.updateInvalidLoginAttempts(request.body.username)
 
         const attempts = await database.getInvalidLoginAttempts(request.body.username)
         if (attempts.length >= 5) {
