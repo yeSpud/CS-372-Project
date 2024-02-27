@@ -1,7 +1,7 @@
 // define login check funtions, fastify route handling: login, signup, signout
 
 const { Login, Signup, Signout } = require("./schema/authentication")
-const database = require("../../../database/index")
+const { prisma } = require("../../../database")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
 const {env} = require("../config")
 
@@ -76,11 +76,18 @@ const routes = async function(fastify) {
 
     fastify.post("/signup", { schema: Signup }, async (request, response) => {
         usernameCheck(request.body.username)
-        passwordCheck(request.body.password) 
-        if (await database.userInDatabase(request.body.username)) {
+        passwordCheck(request.body.password)
+
+        if (await prisma.user.findUnique({where: { username: request.body.username }}) !== null) {
             throw new Conflict("That username is already in use, please choose another.")
         }
-        await database.addUserToDatabase(request.body.username, request.body.password)
+
+        await prisma.user.create({ data: {
+            username: request.body.username,
+            password: request.body.password,
+            accountType: "VIEWER",
+            loginAttempts: []
+        }})
         response.code(201)
     })
 
