@@ -8,6 +8,9 @@ const Type = require("@sinclair/typebox")
 const Ajv = require("ajv")
 const addFormats = require("ajv-formats")
 
+const { PrismaClient } = require("@prisma/client")
+const prisma = new PrismaClient()
+
 const ajv = addFormats(new Ajv({ removeAdditional: "all" }), [
     "date-time",
     "time",
@@ -164,4 +167,4 @@ async function addInvalidLoginAttempt(username) {
 }
 
 module.exports = { addUserToDatabase, userInDatabase, passwordMatches, updateInvalidLoginAttempts,
-    getInvalidLoginAttempts, addInvalidLoginAttempt }
+    getInvalidLoginAttempts, addInvalidLoginAttempt, prisma }
