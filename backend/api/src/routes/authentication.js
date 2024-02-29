@@ -1,7 +1,7 @@
 // define login check funtions, fastify route handling: login, signup, signout
 
 const { Login, Signup, Signout } = require("./schema/authentication")
-const database = require("../../../database/index")
+const { prisma, AccountType } = require("../../../database")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
 const {env} = require("../config")
 
@@ -53,22 +53,30 @@ const routes = async function(fastify) {
 
         usernameCheck(request.body.username)
 
-        if (!await database.userInDatabase(request.body.username)) {
+        let user = await prisma.user.findUnique({ where: { username: request.body.username } })
+        if (user === null) {
             throw new NotFound("That username does not exist. Please create an account.")
         }
 
-        await database.updateInvalidLoginAttempts(request.body.username)
+        const cutoffDate = new Date().getTime() - (24 * 60 * 60 * 1000)
+        user = await prisma.user.update({
+            where: { id: user.id },
+            data: { loginAttempts: user.loginAttempts.filter(date => (date.getTime() > cutoffDate)) }
+        })
 
-        const attempts = await database.getInvalidLoginAttempts(request.body.username)
-        if (attempts.length >= 5) {
+        const attempts = user.loginAttempts.length
+        if (attempts >= 5) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
 
         passwordCheck(request.body.password)
 
-        if (!await database.passwordMatches(request.body.username, request.body.password)) {
-            await database.addInvalidLoginAttempt(request.body.username)
-            throw new Unauthorized(`Incorrect password. ${5-(attempts.length+1)} attempts remaining.`)
+        if (user.password !== request.body.password) {
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { loginAttempts: { push: new Date() } }
+            })
+            throw new Unauthorized(`Incorrect password. ${5-(attempts+1)} attempts remaining.`)
         }
 
         request.session.username = request.body.username
@@ -76,11 +84,18 @@ const routes = async function(fastify) {
 
     fastify.post("/signup", { schema: Signup }, async (request, response) => {
         usernameCheck(request.body.username)
-        passwordCheck(request.body.password) 
-        if (await database.userInDatabase(request.body.username)) {
+        passwordCheck(request.body.password)
+
+        if (await prisma.user.findUnique({where: { username: request.body.username }}) !== null) {
             throw new Conflict("That username is already in use, please choose another.")
         }
-        await database.addUserToDatabase(request.body.username, request.body.password)
+
+        await prisma.user.create({ data: {
+            username: request.body.username,
+            password: request.body.password,
+            accountType: AccountType.VIEWER, // FIXME DO NOT HARDCODE THIS!
+            loginAttempts: []
+        }})
         response.code(201)
     })
 
