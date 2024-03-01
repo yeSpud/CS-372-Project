@@ -7,18 +7,16 @@ const { prisma } = require("../../../database")
 const routes = async function(fastify) {
 
     fastify.get("/@me", { schema: User.GET }, async request => {
-
         if (!request.isLoggedIn()) {
             throw new Unauthorized("You need to be logged in first")
         }
 
-        return await prisma.user.find({
-            where: { id: request.session.userId },
-            include: {
-                loginAttempts: false,
-                password: false
-            }
-        })
+        const user = await prisma.user.findUnique({ where: { id: request.session.userId }})
+        return {
+            id: user.id,
+            username: user.username,
+            accountType: user.accountType
+        }
     })
 
 }
