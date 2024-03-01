@@ -7,7 +7,7 @@ const Login = {
         username: Type.String(),
         password: Type.String()
     }),
-    response: { "200": Type.Null() }
+    response: { 200: Type.Null() }
 }
 
 const Signup = { 
@@ -15,11 +15,11 @@ const Signup = {
         username: Type.String(),
         password: Type.String()
     }),
-    response: { "201": Type.Null() }
+    response: { 201: Type.Null() }
 }
 
 const Signout = {
-    response: { "302": Type.Null() }
+    response: { 302: Type.Null() }
 }
 
 module.exports = { Login, Signup, Signout }

@@ -7,6 +7,7 @@ const fastifySession = require("@fastify/session")
 const fastifyCors = require("@fastify/cors")
 const config = require("./config")
 const routes = require("./routes")
+const authentication = require("./plugins/authentication")
 
 async function build(opts = {}) {
     const server = fastify({ ...opts })
@@ -27,6 +28,9 @@ async function build(opts = {}) {
         origin: config.env.CORS_URL,
         credentials: true
     })
+
+    // Add our authentication plugin
+    await server.register(authentication)
 
     // Register our routes
     await server.register(routes, {})
