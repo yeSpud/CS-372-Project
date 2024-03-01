@@ -79,7 +79,7 @@ const routes = async function(fastify) {
             throw new Unauthorized(`Incorrect password. ${5-(attempts+1)} attempts remaining.`)
         }
 
-        request.session.username = request.body.username
+        request.session.userId = user.id
     })
 
     fastify.post("/signup", { schema: Signup }, async (request, response) => {
