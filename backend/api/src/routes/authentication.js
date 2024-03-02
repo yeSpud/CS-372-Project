@@ -94,7 +94,7 @@ const routes = async function(fastify) {
             throw new Conflict("That username is already in use, please choose another.")
         }
         // encrypt before saving password to database
-        encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
+        const encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
         await prisma.user.create({ data: {
             username: request.body.username,
             password: encryptedPassword,
