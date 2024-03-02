@@ -1,9 +1,17 @@
 // define login check funtions, fastify route handling: login, signup, signout
 
+// npm install crypto
+const crypto = require('crypto')
+
 const { Login, Signup, Signout } = require("./schema/authentication")
 const { prisma, AccountType } = require("../../../database")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
 const {env} = require("../config")
+
+// glorious password encryption function that will totally work first try
+function encryptDaPassword(password) {
+    return crypto.createHash("sha256").update(password).digest()
+}
 
 // 4 character long minimum username only small letters, must have 1 underscore as only special character
 function usernameCheck(username) {
@@ -68,10 +76,10 @@ const routes = async function(fastify) {
         if (attempts >= 5) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
-
+        
         passwordCheck(request.body.password)
 
-        if (user.password !== request.body.password) {
+        if (user.password !== encryptDaPassword(request.body.password)) { // encrypt to check with encrypted password
             await prisma.user.update({
                 where: { id: user.id },
                 data: { loginAttempts: { push: new Date() } }
@@ -89,10 +97,11 @@ const routes = async function(fastify) {
         if (await prisma.user.findUnique({where: { username: request.body.username }}) !== null) {
             throw new Conflict("That username is already in use, please choose another.")
         }
-
+        // encrypt before saving password to database
+        const encryptedPassword = encryptDaPassword(request.body.password)
         await prisma.user.create({ data: {
             username: request.body.username,
-            password: request.body.password,
+            password: encryptedPassword,
             accountType: AccountType.VIEWER, // FIXME DO NOT HARDCODE THIS!
             loginAttempts: []
         }})
