@@ -72,7 +72,7 @@ const routes = async function(fastify) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
         // encrypt to check with encrypted password
-        encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
+        const encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
         passwordCheck(encryptedPassword)
 
         if (user.password !== request.body.password) {
