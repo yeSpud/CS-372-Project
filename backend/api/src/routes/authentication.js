@@ -1,5 +1,8 @@
 // define login check funtions, fastify route handling: login, signup, signout
 
+// npm install crypto
+const crypto = require('crypto')
+
 const { Login, Signup, Signout } = require("./schema/authentication")
 const { prisma, AccountType } = require("../../../database")
 const { NotFound, TooManyRequests, Unauthorized, BadRequest, Conflict } = require("http-errors")
@@ -68,8 +71,9 @@ const routes = async function(fastify) {
         if (attempts >= 5) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
-
-        passwordCheck(request.body.password)
+        // encrypt to check with encrypted password
+        encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
+        passwordCheck(encryptedPassword)
 
         if (user.password !== request.body.password) {
             await prisma.user.update({
@@ -89,10 +93,11 @@ const routes = async function(fastify) {
         if (await prisma.user.findUnique({where: { username: request.body.username }}) !== null) {
             throw new Conflict("That username is already in use, please choose another.")
         }
-
+        // encrypt before saving password to database
+        encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
         await prisma.user.create({ data: {
             username: request.body.username,
-            password: request.body.password,
+            password: encryptedPassword,
             accountType: AccountType.VIEWER, // FIXME DO NOT HARDCODE THIS!
             loginAttempts: []
         }})
