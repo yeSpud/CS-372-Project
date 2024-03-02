@@ -71,11 +71,10 @@ const routes = async function(fastify) {
         if (attempts >= 5) {
             throw new TooManyRequests("Account is locked due to too many failed login attempts.")
         }
-        // encrypt to check with encrypted password
-        const encryptedPassword = crypto.createHash("sha256").update(request.body.password).digest()
-        passwordCheck(encryptedPassword)
+        
+        passwordCheck(request.body.password)
 
-        if (user.password !== request.body.password) {
+        if (user.password !== crypto.createHash("sha256").update(request.body.password).digest()) { // encrypt to check with encrypted password
             await prisma.user.update({
                 where: { id: user.id },
                 data: { loginAttempts: { push: new Date() } }
