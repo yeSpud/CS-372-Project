@@ -33,5 +33,6 @@ model Movie {
   genre String
   comments String[]
   likes Int
+  views Int
   fileLocation String
 }
