@@ -26,3 +26,12 @@ model User {
   accountType AccountType
   loginAttempts DateTime[]
 }
+
+model Movie {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  name String
+  genre String
+  comments String[]
+  likes Int
+  fileLocation String
+}
