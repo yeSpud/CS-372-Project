@@ -5,9 +5,10 @@ const Movie = Type.Object({
     name: Type.String(),
     genre: Type.String(),
     comments: Type.Array(Type.String()),
-    likes: Type.Number(),
+    movieLocation: Type.String(),
     views: Type.Number(),
-    fileLocation: Type.String()
+    shown: Type.Boolean(),
+    likes: Type.Array(Type.String())
 })
 
 const Movies = {

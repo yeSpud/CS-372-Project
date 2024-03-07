@@ -9,7 +9,15 @@ const routes = async function(fastify) {
             throw new Unauthorized("You must be logged in to view movies")
         }
 
-        return await prisma.movie.findMany()
+        const filters = {}
+        for (const key of Object.keys(request.query)) {
+            filters[key] = {
+                contains: request.query[key],
+                mode: "insensitive"
+            }
+        }
+
+        return await prisma.movie.findMany({ where: filters })
     })
 
 }
