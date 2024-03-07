@@ -1,7 +1,7 @@
 // define login check funtions, fastify route handling: login, signup, signout
 
 // npm install crypto
-const crypto = require('crypto')
+const crypto = require("crypto")
 
 const { Login, Signup, Signout } = require("./schema/authentication")
 const { prisma, AccountType } = require("../../../database")
@@ -10,7 +10,7 @@ const {env} = require("../config")
 
 // glorious password encryption function that will totally work first try
 function encryptDaPassword(password) {
-    return crypto.createHash("sha256").update(password).digest()
+    return crypto.createHash("sha256").update(password).digest("base64")
 }
 
 // 4 character long minimum username only small letters, must have 1 underscore as only special character
@@ -102,7 +102,7 @@ const routes = async function(fastify) {
         await prisma.user.create({ data: {
             username: request.body.username,
             password: encryptedPassword,
-            accountType: AccountType.VIEWER, // FIXME DO NOT HARDCODE THIS!
+            accountType: AccountType.VIEWER,
             loginAttempts: []
         }})
         response.code(201)
