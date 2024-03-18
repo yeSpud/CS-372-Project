@@ -17,7 +17,7 @@ const Movies = {
             name: Type.Optional(Type.String()),
             genre: Type.Optional(Type.String())
         }),
-        response: { 200: Type.Array(Movie) }
+        response: { 200: Type.Array(Type.Omit(Movie, ["comments", "movieLocation", "views", "shown", "likes"])) }
     }
 }
 
