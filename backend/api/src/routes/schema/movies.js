@@ -1,6 +1,6 @@
 const Type = require("@sinclair/typebox")
 
-const Movie = Type.Object({
+const MovieType = Type.Object({
     id: Type.String(),
     name: Type.String(),
     genre: Type.String(),
@@ -17,8 +17,15 @@ const Movies = {
             name: Type.Optional(Type.String()),
             genre: Type.Optional(Type.String())
         }),
-        response: { 200: Type.Array(Type.Omit(Movie, ["comments", "movieLocation", "views", "shown", "likes"])) }
+        response: { 200: Type.Array(Type.Omit(MovieType, ["comments", "movieLocation", "views", "shown", "likes"])) }
     }
 }
 
-module.exports = { Movies }
+const Movie = {
+    GET: {
+        params: Type.Object({ id: Type.String() }),
+        response: { 200: MovieType }
+    }
+}
+
+module.exports = { Movies, Movie }
