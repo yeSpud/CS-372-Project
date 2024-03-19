@@ -1,4 +1,4 @@
-const { PrismaClient, AccountType } = require("@prisma/client")
+const { PrismaClient, AccountType, PrismaClientKnownRequestError } = require("@prisma/client")
 
 /**
  * @constant
@@ -7,4 +7,4 @@ const { PrismaClient, AccountType } = require("@prisma/client")
  */
 const prisma = new PrismaClient()
 
-module.exports = { prisma, AccountType }
+module.exports = { prisma, AccountType, PrismaClientKnownRequestError }

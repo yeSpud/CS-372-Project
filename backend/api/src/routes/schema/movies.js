@@ -25,6 +25,14 @@ const Movie = {
     GET: {
         params: Type.Object({ id: Type.String() }),
         response: { 200: MovieType }
+    },
+    POST: {
+        body: {
+            name: Type.String(),
+            genre: Type.String(),
+            movieLocation: Type.String()
+        },
+        response: { 201: MovieType }
     }
 }
 
