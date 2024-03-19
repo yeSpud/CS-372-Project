@@ -33,7 +33,7 @@ model Movie {
   genre String
   comments String[]
   movieLocation String @unique
-  views Int
-  shown Boolean
+  views Int @default(0)
+  shown Boolean @default(true)
   likes String[] // Stores the usernames of who liked the movie
 }
