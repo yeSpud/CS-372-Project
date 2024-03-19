@@ -1,6 +1,6 @@
 const { Movies, Movie } = require("./schema/movies")
-const { Unauthorized, Forbidden } = require("http-errors")
-const { prisma } = require("../../../database")
+const { Unauthorized, Forbidden, NotFound, Conflict } = require("http-errors")
+const { prisma, PrismaClientKnownRequestError } = require("../../../database")
 const routes = async function(fastify) {
 
     fastify.get("/", { schema: Movies.GET }, async request => {
@@ -21,6 +21,7 @@ const routes = async function(fastify) {
     })
 
     fastify.get("/:id", { schema: Movie.GET }, async request => {
+
         if (!request.isLoggedIn()) {
             throw new Unauthorized("You must be logged in to view movie details")
         }
@@ -29,9 +30,33 @@ const routes = async function(fastify) {
             throw new Forbidden("You must be a marketing manager or content editor to view movie details")
         }
 
-        return await prisma.movie.findUnique({where: { id: request.params.id }})
+        const movie = await prisma.movie.findUnique({ where: { id: request.params.id } })
+        if (movie === null) {
+            throw new NotFound("That movie was not found")
+        }
+        return movie
     })
 
+    fastify.post("/", { schema: Movie.POST }, async (request, reply) => {
+
+        if (!request.isLoggedIn()) {
+            throw new Unauthorized("You must be logged in to view movie details")
+        }
+
+        if (await !request.isContentEditor()) {
+            throw new Forbidden("You must be a content editor to add a movie")
+        }
+
+        try {
+            reply.code(201)
+            return await prisma.movie.create({ data: request.body })
+        } catch (e) {
+            if (e instanceof PrismaClientKnownRequestError && e.code === "P2002") {
+                throw new Conflict("That movie has already been added!")
+            }
+            throw e
+        }
+    })
 }
 
 module.exports = { routes }
