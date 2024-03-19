@@ -21,4 +21,11 @@ const Movies = {
     }
 }
 
-module.exports = { Movies }
+const Movie = {
+    GET: {
+        querystring: Type.Object({ id: Type.String() }),
+        response: { 200: Movie }
+    }
+}
+
+module.exports = { Movies, Movie }
