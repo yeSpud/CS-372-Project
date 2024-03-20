@@ -1,5 +1,4 @@
 <!-- Vue code for the home page, has a login link and when user is logged in, has a hyperlink to logout-->
-
 <script setup>
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
@@ -28,7 +27,7 @@ onMounted(async () => {
   <main>
     <template v-if="user === null">
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-primary btn-lg" @click="router.push({name: 'login'})">Login / Signup</button>
+        <button type="button" class="btn btn-primary btn-lg" @click="router.push({ name: 'login' })">Login / Signup</button>
       </div>
       <h2 style="color: white; text-align: center">You need to log in to view movies</h2>
     </template>
@@ -49,17 +48,3 @@ onMounted(async () => {
     </template>
   </main>
 </template>
-
-<style scoped>
-.thumbnail-image {
-  display: block;
-  padding:2px;
-  max-width: 200px;
-  height:auto;
-}
-
-.thumbnail-list li {
-  display: inline-block;
-}
-
-</style>
