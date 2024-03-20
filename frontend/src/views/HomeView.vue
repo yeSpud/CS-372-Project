@@ -42,6 +42,7 @@ onMounted(async () => {
       <div v-if="route.query.hasOwnProperty('loginSuccess')" class="alert alert-success" role="alert">
         Successfully signed in!
       </div>
+      <button v-if="user.accountType === 'CONTENT_EDITOR'" type="button" class="btn" @click="router.push({ name: 'add' })">Add movie</button>
       <ul v-for="movie in movies" :key="movie.id">
         <li style="color: white">{{movie.name}}</li>
       </ul>

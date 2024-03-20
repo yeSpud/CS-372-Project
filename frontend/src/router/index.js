@@ -10,6 +10,7 @@ import WatchMovieView from "@/views/WatchMovieView.vue"
 
 import HomeView from "../views/HomeView.vue"
 
+// TODO Add route guard to check for certain account types on privileged pages
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
