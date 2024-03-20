@@ -3,10 +3,14 @@
 
 import { createRouter, createWebHistory } from "vue-router"
 
+import AddMovieView from "@/views/AddMovieView.vue"
+import EditMovieView from "@/views/EditMovieView.vue"
 import LoginView from "@/views/LoginView.vue"
+import WatchMovieView from "@/views/WatchMovieView.vue"
 
 import HomeView from "../views/HomeView.vue"
 
+// TODO Add route guard to check for certain account types on privileged pages
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -27,6 +31,21 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginView
+    },
+    {
+      path: "/watch",
+      name: "watch",
+      component: WatchMovieView
+    },
+    {
+      path: "/edit/:id",
+      name: "edit",
+      component: EditMovieView
+    },
+    {
+      path: "/add",
+      name: "add",
+      component: AddMovieView
     }
   ]
 })

@@ -1,4 +1,4 @@
-<!-- template example -->
+<!-- Root application view -->
 
 <script setup>
 import { RouterView } from "vue-router"
