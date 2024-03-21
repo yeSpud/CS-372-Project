@@ -9,7 +9,7 @@ const routes = async function(fastify) {
             throw new Unauthorized("You must be logged in to view movies")
         }
 
-        let filters = {}
+        let filters = await request.isViewer() ? { shown: true } : {}
         for (const key of Object.keys(request.query)) {
             filters[key] = {
                 contains: request.query[key],
