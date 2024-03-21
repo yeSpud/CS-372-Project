@@ -61,7 +61,10 @@ onMounted(async () => {
         Add movie
       </button>
       <ul v-for="movie in movies" :key="movie.id">
-        <li style="color: white">{{ movie.name }}</li>
+        <li style="color: white">
+          <RouterLink v-if="user.accountType !== 'VIEWER'" :to="{ name: 'edit', params: { id: movie.id} }">{{ movie.name }}</RouterLink>
+          <p v-else>{{ movie.name }}</p>
+        </li>
       </ul>
     </template>
   </main>
