@@ -57,6 +57,21 @@ const routes = async function(fastify) {
             throw e
         }
     })
+
+    fastify.delete("/", { schema: Movies.DELETE }, async (request, reply) => {
+
+        if (!request.isContentEditor()) {
+            throw new Unauthorized("You must be a content editor to remove movies")
+        }
+
+        // Instead of removing them from the database just set the shown boolean to false
+        await prisma.movie.updateMany({
+            where: { id: { in: [...request.body.movieIDs] } },
+            data: { shown: false }
+        })
+
+        reply.code(204)
+    })
 }
 
 module.exports = { routes }
