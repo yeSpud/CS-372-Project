@@ -57,6 +57,36 @@ const routes = async function(fastify) {
             throw e
         }
     })
+
+    fastify.patch("/:id", { schema: Movie.PATCH }, async request => {
+
+        if (!request.isLoggedIn()) {
+            throw new Unauthorized("You must be logged in to edit movie details")
+        }
+
+        // Only the marketing manager is allowed to leave comments,
+        // whereas the content editor is allowed to edit everything else (except comments)
+        if (request.body.comments !== undefined && !(await request.isMarketingManager())) {
+            throw new Forbidden("Only marketing managers are allowed to leave comments")
+        }
+
+        if ((request.body.name !== undefined || request.body.genre !== undefined || request.body.movieLocation !== undefined
+            || request.body.shown !== undefined) && !(await request.isContentEditor())) {
+            throw new Forbidden("Only content editors are allowed to edit movie details")
+        }
+
+        try {
+            return await prisma.movie.update({
+                where: { id: request.params.id },
+                data: request.body
+            })
+        } catch (e) {
+            if (e instanceof PrismaClientKnownRequestError && e.code === "P2002") {
+                throw new Conflict("A movie with that url has already been added!")
+            }
+            throw e
+        }
+    })
 }
 
 module.exports = { routes }
