@@ -9,7 +9,7 @@ const routes = async function(fastify) {
             throw new Unauthorized("You must be logged in to view movies")
         }
 
-        let filters = {}
+        let filters = await request.isViewer() ? { shown: true } : {}
         for (const key of Object.keys(request.query)) {
             filters[key] = {
                 contains: request.query[key],
@@ -57,7 +57,22 @@ const routes = async function(fastify) {
             throw e
         }
     })
+  
+    fastify.delete("/", { schema: Movies.DELETE }, async (request, reply) => {
 
+        if (!request.isContentEditor()) {
+            throw new Unauthorized("You must be a content editor to remove movies")
+        }
+
+        // Instead of removing them from the database just set the shown boolean to false
+        await prisma.movie.updateMany({
+            where: { id: { in: [...request.body.movieIDs] } },
+            data: { shown: false }
+        })
+
+        reply.code(204)
+    })
+  
     fastify.patch("/:id", { schema: Movie.PATCH }, async request => {
 
         if (!request.isLoggedIn()) {

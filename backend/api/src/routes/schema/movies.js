@@ -18,6 +18,12 @@ const Movies = {
             genre: Type.Optional(Type.String())
         }),
         response: { 200: Type.Array(Type.Omit(MovieType, ["comments", "movieLocation", "views", "shown", "likes"])) }
+    },
+    DELETE: {
+        body: Type.Object({
+            movieIDs: Type.Array(Type.String())
+        }),
+        response: { 204: Type.Null() }
     }
 }
 
