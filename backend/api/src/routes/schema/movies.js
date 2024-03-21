@@ -33,12 +33,23 @@ const Movie = {
         response: { 200: MovieType }
     },
     POST: {
-        body: {
+        body: Type.Object({
             name: Type.String(),
             genre: Type.String(),
             movieLocation: Type.String()
-        },
+        }),
         response: { 201: MovieType }
+    },
+    PATCH: {
+        params: Type.Object({ id: Type.String() }),
+        body: Type.Object({
+            name: Type.Optional(Type.String()),
+            genre: Type.Optional(Type.String()),
+            comments: Type.Optional(Type.Array(Type.String())),
+            movieLocation: Type.Optional(Type.String()),
+            shown: Type.Optional(Type.Boolean())
+        }),
+        response: { 200: MovieType }
     }
 }
 
