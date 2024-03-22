@@ -8,15 +8,7 @@ const submitSuccess = ref(false)
 
 async function addMovie(data) {
   submitSuccess.value = false
-  if (myForm.value === null) {
-    return
-  }
-  const data = JSON.stringify({
-    name: myForm.value.node.value.name,
-    genre: myForm.value.node.value.genre,
-    movieLocation: myForm.value.node.value.movieUrl,
-    comments: ""
-  })
+  error.value = ""
 
   try {
     const response = await fetch("http://localhost:8080/movies", {
