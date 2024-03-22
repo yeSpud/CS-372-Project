@@ -79,7 +79,7 @@ const genreList = ["Action", "Scifi", "Thriller", "Romance", "Drama"]
 
       <FormKit
         type="text"
-        name="movieUrl"
+        name="movieLocation"
         label="Movie URL"
         input-class="form-control"
         validation="required"
