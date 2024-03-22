@@ -3,7 +3,6 @@
 import { ref } from "vue"
 
 import router from "@/router/index.js"
-const myForm = ref(null)
 const error = ref("")
 const submitSuccess = ref(false)
 
