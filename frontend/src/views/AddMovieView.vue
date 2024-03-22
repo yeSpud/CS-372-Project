@@ -20,7 +20,6 @@ async function addMovie(data) {
 
     if (response.ok) {
       submitSuccess.value = true
-      error.value = ""
     } else {
       const json = await response.json()
       error.value = json.message
