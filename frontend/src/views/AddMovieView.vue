@@ -8,6 +8,7 @@ const error = ref("")
 const submitSuccess = ref(false)
 
 async function addMovie() {
+  console.log("addingmovie")
   submitSuccess.value = false
   if (myForm.value === null) {
     return
@@ -99,7 +100,7 @@ const genreList = ['Action', 'Scifi', 'Thriller', 'Romance', 'Drama']
       
       <div class="row btn-group btn-group-lg" role="group">
         <FormKit input-class="btn" type="button" label="Cancle" @click="router.push({ name: 'home' })"/>
-        <FormKit input-class="btn" type="submit" label="Submit" @click="addMovie"/>
+        <FormKit input-class="btn" type="submit" label="Submit" />
       </div>
     </FormKit>
   </main>
