@@ -7,9 +7,13 @@ import router from "@/router/index.js"
 
 const route = useRoute()
 
+const user = ref(null)
 const movie = ref(null)
 
 onMounted(async () => {
+  const getUser = await fetch("http://localhost:8080/users/@me", { credentials: "include" })
+  user.value = getUser.ok ? await getUser.json() : null
+
   const response = await fetch(`http://localhost:8080/movies/${route.params.id}`, { credentials: "include" })
   console.log(response)
   if (!response.ok) {
@@ -25,7 +29,7 @@ async function submit(data) {
 </script>
 
 <template>
-  <main class="container">
+  <main v-if="user !== null" class="container">
     <FormKit
       v-if="movie !== null"
       class="form-group"
@@ -33,33 +37,71 @@ async function submit(data) {
       :actions="false"
       @submit="submit"
       :value="movie">
-      <FormKit
-        type="text"
-        name="name"
-        label="Title"
-        input-class="form-control"
-      />
-      <FormKit
-        type="text"
-        name="genre"
-        label="Genre"
-        input-class="form-control"
-      />
-      <FormKit
-        type="text"
-        name="movieLocation"
-        label="Movie file location"
-        input-class="form-control"
-      />
-      <FormKit
-        type="checkbox"
-        name="shown"
-        label="Shown"
-        input-class="form-control"
-      />
+      <template v-if="user.accountType ==='CONTENT_EDITOR'">
+        <FormKit
+          type="text"
+          name="name"
+          label="Title"
+          input-class="form-control"
+        />
+        <FormKit
+          type="text"
+          name="genre"
+          label="Genre"
+          input-class="form-control"
+        />
+        <FormKit
+          type="text"
+          name="movieLocation"
+          label="Movie file location"
+          input-class="form-control"
+        />
+        <FormKit
+          type="checkbox"
+          name="shown"
+          label="Shown"
+          input-class="form-control"
+        />
+        <FormKit
+          type="textarea"
+          name="comments"
+          label="Comments"
+          input-class="form-control"
+          disabled="true"/>
+      </template>
+      <template v-else-if="user.accountType === 'MARKETING_MANAGER'">
+        <FormKit
+          type="text"
+          name="name"
+          label="Title"
+          input-class="form-control"
+          disabled="true"
+        />
+        <FormKit
+          type="text"
+          name="genre"
+          label="Genre"
+          input-class="form-control"
+          disabled="true"
+        />
+        <FormKit
+          type="checkbox"
+          name="shown"
+          label="Shown"
+          input-class="form-control"
+          disabled="true"
+        />
+        <p style="color: white">Views: {{ movie.views }}</p>
+        <p style="color: white">Likes: {{ movie.likes.length }}</p>
+        <FormKit
+          type="textarea"
+          name="comments"
+          label="Comments"
+          input-class="form-control" />
+      </template>
       <div class="row btn-group btn-group-lg" role="group">
-        <FormKit input-class="btn" type="submit" label="Save" />
         <FormKit input-class="btn" type="button" label="Back" @click="router.back()" />
+        <FormKit input-class="btn" type="submit" label="Save" />
       </div>
     </FormKit>
   </main>
