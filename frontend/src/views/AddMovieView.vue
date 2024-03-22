@@ -74,11 +74,8 @@ const genreList = ["Action", "Scifi", "Thriller", "Romance", "Drama"]
         placeholder="Select genre"
         input-class="form-control"
         :options="genreList"
-        :validation="[['required']]"
-        :validation-messages="{
-          required: 'A movie name is required',
-          characterMax: 'Movie name must be under 200 characters long'
-        }"
+        validation="required"
+        :validation-messages="{ required: 'A movie genre is required' }"
       />
 
       <FormKit
