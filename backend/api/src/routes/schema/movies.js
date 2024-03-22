@@ -4,7 +4,7 @@ const MovieType = Type.Object({
     id: Type.String(),
     name: Type.String(),
     genre: Type.String(),
-    comments: Type.Array(Type.String()),
+    comments: Type.String(),
     movieLocation: Type.String(),
     views: Type.Number(),
     shown: Type.Boolean(),
@@ -45,7 +45,7 @@ const Movie = {
         body: Type.Object({
             name: Type.Optional(Type.String()),
             genre: Type.Optional(Type.String()),
-            comments: Type.Optional(Type.Array(Type.String())),
+            comments: Type.Optional(Type.String()),
             movieLocation: Type.Optional(Type.String()),
             shown: Type.Optional(Type.Boolean())
         }),
