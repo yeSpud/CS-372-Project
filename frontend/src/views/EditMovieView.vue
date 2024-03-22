@@ -10,6 +10,9 @@ const route = useRoute()
 const user = ref(null)
 const movie = ref(null)
 
+const success = ref(false)
+const error = ref("")
+
 onMounted(async () => {
   const getUser = await fetch("http://localhost:8080/users/@me", { credentials: "include" })
   user.value = getUser.ok ? await getUser.json() : null
@@ -25,6 +28,9 @@ onMounted(async () => {
 
 async function submit(data) {
 
+  error.value = ""
+  success.value = false
+
   const diff = {}
   for (const [key, value] of Object.entries(data)) {
 
@@ -36,12 +42,35 @@ async function submit(data) {
       diff[key] = value
     }
   }
-  console.log(diff)
+
+  try {
+    const response = await fetch(`http://localhost:8080/movies/${route.params.id}`, {
+      credentials: "include",
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(diff)
+    })
+
+    if (response.ok) {
+      success.value = true
+    } else {
+      const json = await response.json()
+      error.value = json.message
+    }
+  } catch (e) {
+    if (Object.prototype.hasOwnProperty.call(e, "message")) {
+      error.value = e.message
+    } else {
+      error.value = "Unknown error"
+    }
+  }
 }
 </script>
 
 <template>
   <main v-if="user !== null" class="container">
+    <div v-if="error !== ''" class="alert alert-danger" role="alert">Error: {{ error }}</div>
+    <div v-if="success" class="alert alert-success" role="alert">Movie details updated successfully!</div>
     <FormKit
       v-if="movie !== null"
       class="form-group"
