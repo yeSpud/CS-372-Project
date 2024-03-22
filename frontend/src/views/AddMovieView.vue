@@ -16,7 +16,8 @@ async function addMovie() {
   const data = JSON.stringify({
     name: myForm.value.node.value.name,
     genre: myForm.value.node.value.genre,
-    movieLocation: myForm.value.node.value.movieUrl
+    movieLocation: myForm.value.node.value.movieUrl,
+    comments: ""
   })
 
   try {
@@ -51,7 +52,7 @@ const genreList = ['Action', 'Scifi', 'Thriller', 'Romance', 'Drama']
     <h2 align="center" style="color: white">Add A Movie</h2>
     <div v-if="error !== ''" class="alert alert-danger" role="alert">Error: {{ error }}</div>
     <div v-if="submitSuccess" class="alert alert-success" role="alert">Successfully added movie!</div>
-    <FormKit class="form-group" type="form" #default="{ value }" ref="myForm" @submit="addMovie" :actions="false">
+    <FormKit class="form-group" type="form" ref="myForm" @submit="addMovie" :actions="false">
       
       <FormKit
         type="text"
