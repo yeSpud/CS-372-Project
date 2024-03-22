@@ -24,7 +24,19 @@ onMounted(async () => {
 })
 
 async function submit(data) {
-  console.log(data)
+
+  const diff = {}
+  for (const [key, value] of Object.entries(data)) {
+
+    if (value instanceof Array) {
+      continue
+    }
+
+    if (movie.value[key] !== value) {
+      diff[key] = value
+    }
+  }
+  console.log(diff)
 }
 </script>
 
