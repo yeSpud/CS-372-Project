@@ -6,7 +6,7 @@ import router from "@/router/index.js"
 const error = ref("")
 const submitSuccess = ref(false)
 
-async function addMovie() {
+async function addMovie(data) {
   submitSuccess.value = false
   if (myForm.value === null) {
     return
