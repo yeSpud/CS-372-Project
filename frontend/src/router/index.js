@@ -38,8 +38,8 @@ const router = createRouter({
       component: WatchMovieView
     },
     {
-      path: "/edit/:id",
-      name: "edit",
+      path: "/details/:id",
+      name: "details",
       component: EditMovieView
     },
     {
