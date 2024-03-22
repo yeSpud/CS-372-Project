@@ -8,7 +8,6 @@ const error = ref("")
 const submitSuccess = ref(false)
 
 async function addMovie() {
-  console.log("addingmovie")
   submitSuccess.value = false
   if (myForm.value === null) {
     return
