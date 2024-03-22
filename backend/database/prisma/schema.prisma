@@ -31,7 +31,7 @@ model Movie {
   id String @id @map("_id") @default(auto()) @db.ObjectId
   name String
   genre String
-  comments String
+  comments String @default("")
   movieLocation String @unique
   views Int @default(0)
   shown Boolean @default(true)
