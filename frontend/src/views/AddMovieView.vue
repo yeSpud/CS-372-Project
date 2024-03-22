@@ -49,11 +49,8 @@ const genreList = ["Action", "Scifi", "Thriller", "Romance", "Drama"]
         name="name"
         label="Movie Name"
         input-class="form-control"
-        :validation="[['required']]"
-        :validation-messages="{
-          required: 'A movie name is required',
-          characterMax: 'Movie name must be under 200 characters long'
-        }"
+        validation="required"
+        :validation-messages="{ required: 'A movie name is required' }"
         validation-visibility="live"
       />
 
