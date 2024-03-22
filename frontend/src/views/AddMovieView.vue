@@ -23,7 +23,7 @@ async function addMovie(data) {
       credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: data
+      body: JSON.stringify(data)
     })
 
     if (response.ok) {
