@@ -88,9 +88,7 @@ const genreList = ["Action", "Scifi", "Thriller", "Romance", "Drama"]
         input-class="form-control"
         validation="required"
         validation-visibility="live"
-        :validation-messages="{
-          required: 'A movie URL is required'
-        }"
+        :validation-messages="{ required: 'A movie URL is required' }"
       />
 
       <div class="row btn-group btn-group-lg" role="group">
