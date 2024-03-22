@@ -5,10 +5,42 @@ import { ref } from "vue"
 import router from "@/router/index.js"
 const myForm = ref(null)
 const error = ref("")
+const submitSuccess = ref(false)
 
-async function addMovie(movieComponents) {
+async function addMovie() {
+  submitSuccess.value = false
+  if (myForm.value === null) {
+    return
+  }
+  const data = JSON.stringify({
+    name: myForm.value.node.value.name,
+    genre: myForm.value.node.value.genre,
+    movieLocation: myForm.value.node.value.movieUrl
+  })
+
+  try {
+    const response = await fetch('http://localhost:8080/movies', {
+      credentials: "include",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: data
+    })
+
+    if (response.ok) {
+      submitSuccess.value = true
+      error.value = ""
+    } else {
+      const json = await response.json()
+      error.value = json.message
+    }
+  } catch (e) {
+    if (Object.prototype.hasOwnProperty.call(e, "message")) {
+      error.value = e.message
+    } else {
+      error.value = "Unknown error"
+    }
+  }
 }
-const genreList2 = [{ label: 'Action', value: 'action'}, { label: 'Scifi', value: 'scifi'}, { label: 'Thriller', value: 'thriller'}, { label: 'Romance', value: 'romance'}, { label: 'Drama', value: 'drama'},]
 
 const genreList = ['Action', 'Scifi', 'Thriller', 'Romance', 'Drama']
 </script>
@@ -16,6 +48,8 @@ const genreList = ['Action', 'Scifi', 'Thriller', 'Romance', 'Drama']
 <template>
   <main class="container">
     <h2 align="center" style="color: white">Add A Movie</h2>
+    <div v-if="error !== ''" class="alert alert-danger" role="alert">Error: {{ error }}</div>
+    <div v-if="submitSuccess" class="alert alert-success" role="alert">Successfully added movie!</div>
     <FormKit class="form-group" type="form" #default="{ value }" ref="myForm" @submit="addMovie" :actions="false">
       
       <FormKit
@@ -64,8 +98,8 @@ const genreList = ['Action', 'Scifi', 'Thriller', 'Romance', 'Drama']
       />
       
       <div class="row btn-group btn-group-lg" role="group">
-        <FormKit input-class="btn" type="button" label="Cancle" />
-        <FormKit input-class="btn" type="submit" label="Submit" />
+        <FormKit input-class="btn" type="button" label="Cancle" @click="router.push({ name: 'home' })"/>
+        <FormKit input-class="btn" type="submit" label="Submit" @click="addMovie"/>
       </div>
     </FormKit>
   </main>
