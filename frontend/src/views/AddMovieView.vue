@@ -43,7 +43,7 @@ const genreList = ["Action", "Scifi", "Thriller", "Romance", "Drama"]
     <div v-if="submitSuccess" class="alert alert-success" role="alert">
       Successfully added movie!
     </div>
-    <FormKit class="form-group" type="form" ref="myForm" @submit="addMovie" :actions="false">
+    <FormKit class="form-group" type="form" @submit="addMovie" :actions="false">
       <FormKit
         type="text"
         name="name"
