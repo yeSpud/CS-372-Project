@@ -70,8 +70,8 @@ const genreList = ["Action", "Scifi", "Thriller", "Romance", "Drama"]
       <FormKit
         type="select"
         name="genre"
-        label="Genre(s)"
-        placeholder=" "
+        label="Genre"
+        placeholder="Select genre"
         input-class="form-control"
         :options="genreList"
         :validation="[['required']]"
