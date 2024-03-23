@@ -1,5 +1,5 @@
 const { Movies, Movie } = require("./schema/movies")
-const { Unauthorized, Forbidden, NotFound, Conflict } = require("http-errors")
+const { BadRequest, Unauthorized, Forbidden, NotFound, Conflict } = require("http-errors")
 const { prisma, PrismaClientKnownRequestError } = require("../../../database")
 const routes = async function(fastify) {
 
@@ -64,7 +64,15 @@ const routes = async function(fastify) {
             throw new Unauthorized("You must be a content editor to remove movies")
         }
 
+        // Make sure the IDs are in a valid format
+        request.body.movieIDs.forEach(id => {
+            if (!id.match(/^[a-f\d]{24}$/i)) {
+                throw new BadRequest(`Id does not match format: ${id}`)
+            }
+        })
+
         // Instead of removing them from the database just set the shown boolean to false
+        // TODO Catch 404s
         await prisma.movie.updateMany({
             where: { id: { in: [...request.body.movieIDs] } },
             data: { shown: false }

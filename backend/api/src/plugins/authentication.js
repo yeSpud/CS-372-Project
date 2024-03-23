@@ -1,5 +1,6 @@
 const fp = require("fastify-plugin")
 const { prisma, AccountType } = require("../../../database")
+const { BadRequest } = require("http-errors")
 
 module.exports = fp(async function(fastify) {
 
@@ -42,6 +43,18 @@ module.exports = fp(async function(fastify) {
             return user.accountType === AccountType.MARKETING_MANAGER
         }
         return false
+    })
+
+    // Add a hook to check if the request's ID param matches the ID format
+    fastify.addHook("preHandler", (request, reply, done) => {
+        if (request.params !== undefined && Object.prototype.hasOwnProperty.call(request.params, "id")) {
+
+            // Check if the ID matches mongoDB ObjectID format
+            if (!request.params.id.match(/^[a-f\d]{24}$/i)) {
+                throw new BadRequest("id does match format")
+            }
+        }
+        done()
     })
 
 })
